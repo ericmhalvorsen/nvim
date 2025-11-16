@@ -136,6 +136,8 @@ return {
       pyright = {},
       ruby_lsp = {},
       rust_analyzer = {},
+      ts_ls = {},
+      elixir_ls = {},
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
