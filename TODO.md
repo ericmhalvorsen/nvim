@@ -186,6 +186,86 @@
   - Already installed via mini.nvim
   - Why: Enhanced a/i text objects
 
+## User-Requested Plugins Status
+
+### ✅ Already Installed/Configured
+- [x] **avante.nvim** - Configured but COMMENTED OUT in `lua/eric/plugins.lua:2`
+  - Already has config file with Claude/Ollama/Moonshot providers
+  - Includes render-markdown.nvim dependency
+  - **Action:** Just uncomment to enable!
+
+- [x] **Ruby LSP** - `ruby_lsp` in `lua/eric/plugins/lsp.lua:137`
+- [x] **Python LSP** - `pyright` in `lua/eric/plugins/lsp.lua:136`
+- [x] **Rust LSP** - `rust_analyzer` in `lua/eric/plugins/lsp.lua:138`
+
+### ❌ Not Installed - Ready to Add
+
+- [ ] **telescope-file-browser** - Telescope extension for file browsing
+  - Repo: `nvim-telescope/telescope-file-browser.nvim`
+  - Why: Browse files/folders in telescope (complement to neo-tree)
+
+- [ ] **barbecue.nvim** - VSCode-like winbar breadcrumbs
+  - Repo: `utilyre/barbecue.nvim`
+  - Why: Shows file path and LSP context in winbar
+
+- [ ] **vim-illuminate** - Highlight word under cursor
+  - Repo: `RRethy/vim-illuminate`
+  - Why: Auto-highlight other occurrences of current word
+
+- [ ] **claude-code.nvim** - Claude Code integration
+  - Repo: `greggh/claude-code.nvim`
+  - Why: Integrate with Claude Code features in Neovim
+
+- [ ] **multicursors.nvim** - Multiple cursors support
+  - Repo: `smoka7/multicursors.nvim`
+  - Why: VSCode-like multiple cursor editing
+
+- [ ] **TypeScript LSP** - `ts_ls` (or `tsserver`)
+  - Need to add to servers table in lsp.lua
+
+- [ ] **Elixir LSP** - `elixir_ls` or `lexical`
+  - Need to add to servers table in lsp.lua
+
+### ⚠️ Alternatives Already Installed (Skip)
+
+- [x] **nvim-tree.lua** - SKIP (you have neo-tree.nvim which is better)
+- [x] **nvim-cmp** - SKIP (you have blink.cmp which is newer/faster)
+
+## Configuration Issues Found
+
+### 🐛 Bugs to Fix
+
+1. **Duplicate gitsigns** in `lua/eric/plugins.lua:10-11`
+   ```lua
+   require "eric.plugins.gitsigns",
+   require "eric.plugins.gitsigns",  -- DUPLICATE LINE 11
+   ```
+
+### ⚡ Performance Optimizations
+
+1. **Uncomment updatetime/timeoutlen** in `lua/eric/settings.lua:20-21`
+   ```lua
+   vim.o.updatetime = 250    -- Currently commented, faster CursorHold
+   vim.o.timeoutlen = 300    -- Currently commented, faster which-key
+   ```
+
+2. **Add formatters to mason** in `lua/eric/plugins/lsp.lua:142`
+   - Currently only has `stylua`
+   - Should add: `prettier`, `black`, `rubocop`, `rustfmt`, etc.
+
+3. **Enable inlay hints by default** (optional)
+   - Currently manual toggle via `<leader>th`
+   - Could auto-enable in lsp.lua
+
+### 🎨 Quality of Life
+
+1. **Consider blink.cmp preset change** in `lua/eric/plugins/blink.lua:60`
+   - Currently: `preset = "enter"`
+   - Alternative: `preset = "super-tab"` for tab completion
+
+2. **Enable more LSP servers** in `lua/eric/plugins/lsp.lua:110-120`
+   - Many useful ones commented: `gopls`, `clangd`, etc.
+
 ## Currently Commented Out
 
 - [ ] **avante.nvim** - Chat with your code (Cursor AI-like)
