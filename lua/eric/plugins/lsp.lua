@@ -141,7 +141,21 @@ return {
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
-    vim.list_extend(ensure_installed, { "stylua" })
+    vim.list_extend(ensure_installed, {
+      -- Lua
+      "stylua",
+      -- TypeScript/JavaScript
+      "prettier",
+      "eslint_d",
+      -- Python
+      "black",
+      "isort",
+      -- Ruby
+      "rubocop",
+      -- Rust (rustfmt comes with rust_analyzer)
+      -- Elixir
+      "mix", -- Elixir formatter (built-in to Elixir)
+    })
     require("mason-tool-installer").setup { ensure_installed = ensure_installed }
     require("mason-lspconfig").setup {
       ensure_installed = {},

@@ -220,11 +220,11 @@
   - Repo: `smoka7/multicursors.nvim`
   - Why: VSCode-like multiple cursor editing
 
-- [ ] **TypeScript LSP** - `ts_ls` (or `tsserver`)
-  - Need to add to servers table in lsp.lua
+- [x] **TypeScript LSP** - `ts_ls` ✅ **ADDED**
+  - Added to servers table in `lsp.lua:139`
 
-- [ ] **Elixir LSP** - `elixir_ls` or `lexical`
-  - Need to add to servers table in lsp.lua
+- [x] **Elixir LSP** - `elixir_ls` ✅ **ADDED**
+  - Added to servers table in `lsp.lua:140`
 
 ### ⚠️ Alternatives Already Installed (Skip)
 
@@ -235,23 +235,19 @@
 
 ### 🐛 Bugs to Fix
 
-1. **Duplicate gitsigns** in `lua/eric/plugins.lua:10-11`
-   ```lua
-   require "eric.plugins.gitsigns",
-   require "eric.plugins.gitsigns",  -- DUPLICATE LINE 11
-   ```
+1. ✅ ~~**Duplicate gitsigns** in `lua/eric/plugins.lua:10-11`~~ **FIXED**
+   - Removed duplicate line
 
 ### ⚡ Performance Optimizations
 
-1. **Uncomment updatetime/timeoutlen** in `lua/eric/settings.lua:20-21`
+1. ✅ ~~**Uncomment updatetime/timeoutlen** in `lua/eric/settings.lua:20-21`~~ **DONE**
    ```lua
-   vim.o.updatetime = 250    -- Currently commented, faster CursorHold
-   vim.o.timeoutlen = 300    -- Currently commented, faster which-key
+   vim.o.updatetime = 250    -- ✅ Applied
+   vim.o.timeoutlen = 300    -- ✅ Applied
    ```
 
-2. **Add formatters to mason** in `lua/eric/plugins/lsp.lua:142`
-   - Currently only has `stylua`
-   - Should add: `prettier`, `black`, `rubocop`, `rustfmt`, etc.
+2. ✅ ~~**Add formatters to mason** in `lua/eric/plugins/lsp.lua:144-158`~~ **DONE**
+   - Added: `prettier`, `eslint_d`, `black`, `isort`, `rubocop`, `mix`
 
 3. **Enable inlay hints by default** (optional)
    - Currently manual toggle via `<leader>th`

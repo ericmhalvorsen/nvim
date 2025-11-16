@@ -102,6 +102,39 @@ servers = {
 - Mix task integration
 - Formatting
 
+### 6. Added Formatters and Linters
+**File:** `lua/eric/plugins/lsp.lua`
+**Lines:** 144-158
+**Change:** Expanded mason tool installer to include formatters/linters for all languages
+```lua
+vim.list_extend(ensure_installed, {
+  -- Lua
+  "stylua",
+  -- TypeScript/JavaScript
+  "prettier",
+  "eslint_d",
+  -- Python
+  "black",
+  "isort",
+  -- Ruby
+  "rubocop",
+  -- Elixir
+  "mix",
+})
+```
+**Tools Added:**
+- **prettier** - Universal formatter for TS/JS/JSON/CSS/HTML/Markdown/YAML
+- **eslint_d** - Fast ESLint daemon for TS/JS linting
+- **black** - Python code formatter
+- **isort** - Python import sorter
+- **rubocop** - Ruby linter and formatter
+- **mix** - Elixir formatter (built-in to Elixir toolchain)
+
+**Impact:**
+- Automatic code formatting across all languages
+- Consistent code style enforcement
+- Auto-installed via Mason on first launch
+
 ---
 
 ## 📊 Summary of Changes
@@ -113,6 +146,7 @@ servers = {
 | Uncomment timeoutlen | `lua/eric/settings.lua` | 3.3x faster which-key | Medium |
 | Add TypeScript LSP | `lua/eric/plugins/lsp.lua` | TS/JS support | High |
 | Add Elixir LSP | `lua/eric/plugins/lsp.lua` | Elixir support | High |
+| Add formatters/linters | `lua/eric/plugins/lsp.lua` | Prettier, ESLint, Black, Rubocop, etc. | High |
 
 ---
 
@@ -133,18 +167,6 @@ servers = {
 ---
 
 ## 📝 Still Recommended (Not Applied Yet)
-
-### Additional Formatters/Linters
-Add to `lua/eric/plugins/lsp.lua` around line 142:
-```lua
-vim.list_extend(ensure_installed, {
-  'stylua',      -- Lua formatter (already included)
-  'prettier',    -- TS/JS/JSON/CSS/HTML formatter
-  'black',       -- Python formatter
-  'rubocop',     -- Ruby linter/formatter
-  'eslint_d',    -- Fast ESLint for TS/JS
-})
-```
 
 ### Optional: Enable Inlay Hints by Default
 Add to `lua/eric/plugins/lsp.lua` after line 77:
