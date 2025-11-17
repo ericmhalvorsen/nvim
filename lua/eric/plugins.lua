@@ -8,7 +8,6 @@ return {
   require "eric.plugins.debug",
   require "eric.plugins.floaterm",
   require "eric.plugins.gitsigns",
-  require "eric.plugins.gitsigns",
   require "eric.plugins.guess_indent",
   require "eric.plugins.indent_line",
   require "eric.plugins.lazynvim",
