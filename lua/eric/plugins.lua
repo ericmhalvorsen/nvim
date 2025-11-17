@@ -15,7 +15,7 @@ return {
   require "eric.plugins.lint",
   require "eric.plugins.lsp",
   require "eric.plugins.mini",
-  require "eric.plugins.minuet",
+  --require "eric.plugins.minuet",
   require "eric.plugins.neo-tree",
   require "eric.plugins.telescope",
   require "eric.plugins.todocomments",
