@@ -36,6 +36,7 @@ return {
     require("eric.keymaps").setup_commander_keymaps()
 
     -- Add all keymaps to commander for discoverability
+    -- set = false prevents double registration since keymaps are already set in keymaps.lua
     commander.add({
       -- Core Editor
       { desc = "Clear search highlighting", cmd = "<cmd>nohlsearch<CR>", keys = { "n", "<Esc>" }, cat = "editor" },
@@ -59,29 +60,77 @@ return {
       { desc = "Search Resume", cmd = "<cmd>Telescope resume<CR>", keys = { "n", "<leader>sr" }, cat = "telescope" },
       { desc = "Search Recent Files", cmd = "<cmd>Telescope oldfiles<CR>", keys = { "n", "<leader>s." }, cat = "telescope" },
       { desc = "Find existing buffers", cmd = "<cmd>Telescope buffers<CR>", keys = { "n", "<leader><leader>" }, cat = "telescope" },
-      { desc = "Fuzzily search in current buffer", keys = { "n", "<leader>/" }, cat = "telescope" },
-      { desc = "Search in Open Files", keys = { "n", "<leader>s/" }, cat = "telescope" },
-      { desc = "Search Neovim files", keys = { "n", "<leader>sn" }, cat = "telescope" },
+      {
+        desc = "Fuzzily search in current buffer",
+        cmd = function()
+          require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
+            winblend = 10,
+            previewer = false,
+          })
+        end,
+        keys = { "n", "<leader>/" },
+        cat = "telescope",
+      },
+      {
+        desc = "Search in Open Files",
+        cmd = function()
+          require("telescope.builtin").live_grep {
+            grep_open_files = true,
+            prompt_title = "Live Grep in Open Files",
+          }
+        end,
+        keys = { "n", "<leader>s/" },
+        cat = "telescope",
+      },
+      {
+        desc = "Search Neovim files",
+        cmd = function()
+          require("telescope.builtin").find_files { cwd = vim.fn.stdpath "config" }
+        end,
+        keys = { "n", "<leader>sn" },
+        cat = "telescope",
+      },
 
       -- Neo-tree
       { desc = "NeoTree reveal", cmd = "<cmd>Neotree reveal<CR>", keys = { "n", "\\" }, cat = "file-tree" },
       { desc = "NeoTree left side", cmd = "<cmd>Neotree left<CR>", keys = { "n", "<leader><C-l>" }, cat = "file-tree" },
       { desc = "NeoTree float", cmd = "<cmd>Neotree float<CR>", keys = { "n", "<leader><C-f>" }, cat = "file-tree" },
 
-      -- Git (Gitsigns)
-      { desc = "Jump to next git change", keys = { "n", "]c" }, cat = "git" },
-      { desc = "Jump to previous git change", keys = { "n", "[c" }, cat = "git" },
-      { desc = "Git stage hunk", keys = { "n", "<leader>hs" }, cat = "git" },
-      { desc = "Git reset hunk", keys = { "n", "<leader>hr" }, cat = "git" },
-      { desc = "Git Stage buffer", keys = { "n", "<leader>hS" }, cat = "git" },
-      { desc = "Git undo stage hunk", keys = { "n", "<leader>hu" }, cat = "git" },
-      { desc = "Git Reset buffer", keys = { "n", "<leader>hR" }, cat = "git" },
-      { desc = "Git preview hunk", keys = { "n", "<leader>hp" }, cat = "git" },
-      { desc = "Git blame line", keys = { "n", "<leader>hb" }, cat = "git" },
-      { desc = "Git diff against index", keys = { "n", "<leader>hd" }, cat = "git" },
-      { desc = "Git Diff against last commit", keys = { "n", "<leader>hD" }, cat = "git" },
-      { desc = "Toggle git show blame line", keys = { "n", "<leader>tb" }, cat = "git" },
-      { desc = "Toggle git show Deleted", keys = { "n", "<leader>tD" }, cat = "git" },
+      -- Git (Gitsigns) - These are buffer-local so we show them for reference
+      {
+        desc = "Jump to next git change",
+        cmd = function()
+          require("gitsigns").nav_hunk "next"
+        end,
+        keys = { "n", "]c" },
+        cat = "git",
+      },
+      {
+        desc = "Jump to previous git change",
+        cmd = function()
+          require("gitsigns").nav_hunk "prev"
+        end,
+        keys = { "n", "[c" },
+        cat = "git",
+      },
+      { desc = "Git stage hunk", cmd = "<cmd>Gitsigns stage_hunk<CR>", keys = { "n", "<leader>hs" }, cat = "git" },
+      { desc = "Git reset hunk", cmd = "<cmd>Gitsigns reset_hunk<CR>", keys = { "n", "<leader>hr" }, cat = "git" },
+      { desc = "Git Stage buffer", cmd = "<cmd>Gitsigns stage_buffer<CR>", keys = { "n", "<leader>hS" }, cat = "git" },
+      { desc = "Git undo stage hunk", cmd = "<cmd>Gitsigns undo_stage_hunk<CR>", keys = { "n", "<leader>hu" }, cat = "git" },
+      { desc = "Git Reset buffer", cmd = "<cmd>Gitsigns reset_buffer<CR>", keys = { "n", "<leader>hR" }, cat = "git" },
+      { desc = "Git preview hunk", cmd = "<cmd>Gitsigns preview_hunk<CR>", keys = { "n", "<leader>hp" }, cat = "git" },
+      { desc = "Git blame line", cmd = "<cmd>Gitsigns blame_line<CR>", keys = { "n", "<leader>hb" }, cat = "git" },
+      { desc = "Git diff against index", cmd = "<cmd>Gitsigns diffthis<CR>", keys = { "n", "<leader>hd" }, cat = "git" },
+      {
+        desc = "Git Diff against last commit",
+        cmd = function()
+          require("gitsigns").diffthis "@"
+        end,
+        keys = { "n", "<leader>hD" },
+        cat = "git",
+      },
+      { desc = "Toggle git show blame line", cmd = "<cmd>Gitsigns toggle_current_line_blame<CR>", keys = { "n", "<leader>tb" }, cat = "git" },
+      { desc = "Toggle git show Deleted", cmd = "<cmd>Gitsigns preview_hunk_inline<CR>", keys = { "n", "<leader>tD" }, cat = "git" },
 
       -- Terminal (Floaterm)
       { desc = "Toggle terminal", cmd = "<cmd>FloatermToggle<CR>", keys = { "n", "<leader>tt" }, cat = "terminal" },
@@ -89,29 +138,93 @@ return {
       { desc = "Cycle terminal instance", cmd = "<cmd>FloatermNext<CR>", keys = { "n", "<leader>tn" }, cat = "terminal" },
 
       -- Debug (DAP)
-      { desc = "Debug: Start/Continue", keys = { "n", "<F5>" }, cat = "debug" },
-      { desc = "Debug: Step Into", keys = { "n", "<F1>" }, cat = "debug" },
-      { desc = "Debug: Step Over", keys = { "n", "<F2>" }, cat = "debug" },
-      { desc = "Debug: Step Out", keys = { "n", "<F3>" }, cat = "debug" },
-      { desc = "Debug: Toggle Breakpoint", keys = { "n", "<leader>b" }, cat = "debug" },
-      { desc = "Debug: Set Breakpoint", keys = { "n", "<leader>B" }, cat = "debug" },
-      { desc = "Debug: Toggle UI", keys = { "n", "<F7>" }, cat = "debug" },
+      {
+        desc = "Debug: Start/Continue",
+        cmd = function()
+          require("dap").continue()
+        end,
+        keys = { "n", "<F5>" },
+        cat = "debug",
+      },
+      {
+        desc = "Debug: Step Into",
+        cmd = function()
+          require("dap").step_into()
+        end,
+        keys = { "n", "<F1>" },
+        cat = "debug",
+      },
+      {
+        desc = "Debug: Step Over",
+        cmd = function()
+          require("dap").step_over()
+        end,
+        keys = { "n", "<F2>" },
+        cat = "debug",
+      },
+      {
+        desc = "Debug: Step Out",
+        cmd = function()
+          require("dap").step_out()
+        end,
+        keys = { "n", "<F3>" },
+        cat = "debug",
+      },
+      {
+        desc = "Debug: Toggle Breakpoint",
+        cmd = function()
+          require("dap").toggle_breakpoint()
+        end,
+        keys = { "n", "<leader>b" },
+        cat = "debug",
+      },
+      {
+        desc = "Debug: Set Breakpoint",
+        cmd = function()
+          require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ")
+        end,
+        keys = { "n", "<leader>B" },
+        cat = "debug",
+      },
+      {
+        desc = "Debug: Toggle UI",
+        cmd = function()
+          require("dapui").toggle()
+        end,
+        keys = { "n", "<F7>" },
+        cat = "debug",
+      },
 
       -- Format
-      { desc = "Format buffer", keys = { "n", "<leader>f" }, cat = "format" },
+      {
+        desc = "Format buffer",
+        cmd = function()
+          require("conform").format { async = true, lsp_format = "fallback" }
+        end,
+        keys = { "n", "<leader>f" },
+        cat = "format",
+      },
 
-      -- LSP
-      { desc = "LSP: Rename", keys = { "n", "grn" }, cat = "lsp" },
-      { desc = "LSP: Code Action", keys = { "n", "gra" }, cat = "lsp" },
-      { desc = "LSP: References", keys = { "n", "grr" }, cat = "lsp" },
-      { desc = "LSP: Implementation", keys = { "n", "gri" }, cat = "lsp" },
-      { desc = "LSP: Definition", keys = { "n", "grd" }, cat = "lsp" },
-      { desc = "LSP: Declaration", keys = { "n", "grD" }, cat = "lsp" },
-      { desc = "LSP: Document Symbols", keys = { "n", "gO" }, cat = "lsp" },
-      { desc = "LSP: Workspace Symbols", keys = { "n", "gW" }, cat = "lsp" },
-      { desc = "LSP: Type Definition", keys = { "n", "grt" }, cat = "lsp" },
-      { desc = "LSP: Toggle Inlay Hints", keys = { "n", "<leader>th" }, cat = "lsp" },
-    }, {})
+      -- LSP (These are buffer-local and set on LspAttach, shown here for reference)
+      { desc = "LSP: Rename", cmd = vim.lsp.buf.rename, keys = { "n", "grn" }, cat = "lsp" },
+      { desc = "LSP: Code Action", cmd = vim.lsp.buf.code_action, keys = { "n", "gra" }, cat = "lsp" },
+      { desc = "LSP: References", cmd = "<cmd>Telescope lsp_references<CR>", keys = { "n", "grr" }, cat = "lsp" },
+      { desc = "LSP: Implementation", cmd = "<cmd>Telescope lsp_implementations<CR>", keys = { "n", "gri" }, cat = "lsp" },
+      { desc = "LSP: Definition", cmd = "<cmd>Telescope lsp_definitions<CR>", keys = { "n", "grd" }, cat = "lsp" },
+      { desc = "LSP: Declaration", cmd = vim.lsp.buf.declaration, keys = { "n", "grD" }, cat = "lsp" },
+      { desc = "LSP: Document Symbols", cmd = "<cmd>Telescope lsp_document_symbols<CR>", keys = { "n", "gO" }, cat = "lsp" },
+      { desc = "LSP: Workspace Symbols", cmd = "<cmd>Telescope lsp_dynamic_workspace_symbols<CR>", keys = { "n", "gW" }, cat = "lsp" },
+      { desc = "LSP: Type Definition", cmd = "<cmd>Telescope lsp_type_definitions<CR>", keys = { "n", "grt" }, cat = "lsp" },
+      {
+        desc = "LSP: Toggle Inlay Hints",
+        cmd = function()
+          local bufnr = vim.api.nvim_get_current_buf()
+          vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = bufnr })
+        end,
+        keys = { "n", "<leader>th" },
+        cat = "lsp",
+      },
+    }, { set = false })
 
     -- Uncomment below to revert to simple commander setup:
     -- commander.add({ { desc = "Open commander", cmd = commander.show, keys = { "n", "<leader>p" } } }, {})
