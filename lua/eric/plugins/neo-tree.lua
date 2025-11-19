@@ -10,11 +10,16 @@ return {
     "MunifTanjim/nui.nvim",
   },
   lazy = false,
-  keys = {
-    { "\\", ":Neotree reveal<CR>", desc = "NeoTree reveal", silent = true },
-    { "<leader><c-l>", ":Neotree left<CR>", desc = "Show NeoTree on left side", silent = true },
-    { "<leader><c-f>", ":Neotree float<CR>", desc = "Float NeoTree (default)", silent = true },
-  },
+  -- ============================================================================
+  -- Keymaps are now centralized in lua/eric/keymaps.lua
+  -- ============================================================================
+  keys = require("eric.keymaps").get_neotree_keys(),
+  -- Uncomment below to revert to inline keymaps:
+  -- keys = {
+  --   { "\\", ":Neotree reveal<CR>", desc = "NeoTree reveal", silent = true },
+  --   { "<leader><c-l>", ":Neotree left<CR>", desc = "Show NeoTree on left side", silent = true },
+  --   { "<leader><c-f>", ":Neotree float<CR>", desc = "Float NeoTree (default)", silent = true },
+  -- },
   opts = {
     popup_border_style = "rounded",
     filesystem = {
