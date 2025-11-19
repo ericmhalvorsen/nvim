@@ -119,19 +119,6 @@ return {
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     local servers = {
-      -- clangd = {},
-      -- gopls = {},
-      -- pyright = {},
-      -- rust_analyzer = {},
-      -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-      --
-      -- Some languages (like typescript) have entire language plugins that can be useful:
-      --    https://github.com/pmizio/typescript-tools.nvim
-      --
-      -- But for many setups, the LSP (`ts_ls`) will work just fine
-      -- ts_ls = {},
-      --
-
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
@@ -144,12 +131,21 @@ return {
           },
         },
       },
-
+      gopls = {},
+      clangd = {},
       pyright = {},
       ruby_lsp = {},
       rust_analyzer = {},
-      ts_ls = {},
-      elixir_ls = {},
+      ts_ls = {}, -- Keep in mind the
+      elixirls = {
+        cmd = { "elixir-ls" },
+        settings = {
+          elixirLS = {
+            dialyzerEnabled = false,
+            fetchDeps = false,
+          },
+        },
+      },
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
@@ -164,10 +160,18 @@ return {
       "isort",
       -- Ruby
       "rubocop",
-      -- Rust (rustfmt comes with rust_analyzer)
-      -- Elixir
-      "mix", -- Elixir formatter (built-in to Elixir)
+      -- Rust
+      "rustfmt",
+      -- Vuln
+      "trivy",
     })
+
+    -- UFO config (folding)
+    capabilities.textDocument.foldingRange = {
+      dynamicRegistration = false,
+      lineFoldingOnly = true,
+    }
+
     require("mason-tool-installer").setup { ensure_installed = ensure_installed }
     require("mason-lspconfig").setup {
       ensure_installed = {},
@@ -180,5 +184,6 @@ return {
         end,
       },
     }
+    require("ufo").setup()
   end,
 }

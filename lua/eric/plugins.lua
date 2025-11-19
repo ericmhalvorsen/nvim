@@ -1,12 +1,14 @@
 return {
+
   --require "eric.plugins.avante",
   --require "eric.plugins.minuet",
   require "eric.plugins.autopairs",
   require "eric.plugins.barbar",
   require "eric.plugins.blink",
-  require "eric.plugins.noice",
   require "eric.plugins.cheatsheet",
   require "eric.plugins.colorscheme",
+  require "eric.plugins.commander",
+  require "eric.plugins.comment",
   require "eric.plugins.conform",
   require "eric.plugins.debug",
   require "eric.plugins.floaterm",
@@ -19,10 +21,11 @@ return {
   require "eric.plugins.lualine",
   require "eric.plugins.mini",
   require "eric.plugins.neo-tree",
+  require "eric.plugins.noice",
   require "eric.plugins.telescope",
   require "eric.plugins.todocomments",
   require "eric.plugins.transparent",
   require "eric.plugins.treesitter",
+  require "eric.plugins.ufo",
   require "eric.plugins.whichkey",
-  require "eric.plugins.commander",
 }
