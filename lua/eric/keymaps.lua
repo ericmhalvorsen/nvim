@@ -3,8 +3,78 @@
 -- ============================================================================
 -- All keymaps are defined here for easy discovery and management
 -- Individual plugin files have their keymaps commented out for reference
+-- Keymaps are exported as data for commander.nvim to register and display
 
 local M = {}
+
+-- ============================================================================
+-- Keymap Definitions for Commander
+-- ============================================================================
+
+-- Core editor keymaps
+M.core_keymaps = {
+  { desc = "Clear search highlighting", cmd = "<cmd>nohlsearch<CR>", keys = { "n", "<Esc>" }, cat = "editor" },
+  { desc = "Open diagnostic quickfix list", cmd = vim.diagnostic.setloclist, keys = { "n", "<leader>q" }, cat = "editor" },
+  { desc = "Exit terminal mode", cmd = "<C-\\><C-n>", keys = { "t", "<Esc><Esc>" }, cat = "editor" },
+  { desc = "Move focus to left window", cmd = "<C-w><C-h>", keys = { "n", "<C-h>" }, cat = "windows" },
+  { desc = "Move focus to right window", cmd = "<C-w><C-l>", keys = { "n", "<C-l>" }, cat = "windows" },
+  { desc = "Move focus to lower window", cmd = "<C-w><C-j>", keys = { "n", "<C-j>" }, cat = "windows" },
+  { desc = "Move focus to upper window", cmd = "<C-w><C-k>", keys = { "n", "<C-k>" }, cat = "windows" },
+}
+
+-- Telescope keymaps (built dynamically since they reference builtin)
+M.get_telescope_keymaps = function()
+  local builtin = require "telescope.builtin"
+  return {
+    { desc = "Search Help", cmd = "<cmd>Telescope help_tags<CR>", keys = { "n", "<leader>sh" }, cat = "telescope" },
+    { desc = "Search Keymaps", cmd = "<cmd>Telescope keymaps<CR>", keys = { "n", "<leader>sk" }, cat = "telescope" },
+    { desc = "Search Files", cmd = "<cmd>Telescope find_files<CR>", keys = { "n", "<leader>sp" }, cat = "telescope" },
+    { desc = "Search Telescope pickers", cmd = "<cmd>Telescope builtin<CR>", keys = { "n", "<leader>ss" }, cat = "telescope" },
+    { desc = "Search current Word", cmd = "<cmd>Telescope grep_string<CR>", keys = { "n", "<leader>sw" }, cat = "telescope" },
+    { desc = "Search by Grep", cmd = "<cmd>Telescope live_grep<CR>", keys = { "n", "<leader>sf" }, cat = "telescope" },
+    { desc = "Search Diagnostics", cmd = "<cmd>Telescope diagnostics<CR>", keys = { "n", "<leader>sd" }, cat = "telescope" },
+    { desc = "Search Resume", cmd = "<cmd>Telescope resume<CR>", keys = { "n", "<leader>sr" }, cat = "telescope" },
+    { desc = "Search Recent Files", cmd = "<cmd>Telescope oldfiles<CR>", keys = { "n", "<leader>s." }, cat = "telescope" },
+    { desc = "Find existing buffers", cmd = "<cmd>Telescope buffers<CR>", keys = { "n", "<leader><leader>" }, cat = "telescope" },
+    {
+      desc = "Fuzzily search in current buffer",
+      cmd = function()
+        builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
+          winblend = 10,
+          previewer = false,
+        })
+      end,
+      keys = { "n", "<leader>/" },
+      cat = "telescope",
+    },
+    {
+      desc = "Search in Open Files",
+      cmd = function()
+        builtin.live_grep {
+          grep_open_files = true,
+          prompt_title = "Live Grep in Open Files",
+        }
+      end,
+      keys = { "n", "<leader>s/" },
+      cat = "telescope",
+    },
+    {
+      desc = "Search Neovim files",
+      cmd = function()
+        builtin.find_files { cwd = vim.fn.stdpath "config" }
+      end,
+      keys = { "n", "<leader>sn" },
+      cat = "telescope",
+    },
+  }
+end
+
+-- Floaterm keymaps
+M.floaterm_keymaps = {
+  { desc = "Toggle terminal", cmd = "<cmd>FloatermToggle<CR>", keys = { "n", "<leader>tt" }, cat = "terminal" },
+  { desc = "New terminal", cmd = "<cmd>FloatermNew<CR>", keys = { "n", "<leader>ta" }, cat = "terminal" },
+  { desc = "Cycle terminal instance", cmd = "<cmd>FloatermNext<CR>", keys = { "n", "<leader>tn" }, cat = "terminal" },
+}
 
 -- ============================================================================
 -- Core Editor Keymaps

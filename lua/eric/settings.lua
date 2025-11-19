@@ -32,6 +32,9 @@ vim.o.confirm = true
 -- ============================================================================
 -- Keymaps are now centralized in lua/eric/keymaps.lua
 -- ============================================================================
+-- Keymaps are registered by commander.nvim (see lua/eric/plugins/commander.lua)
+-- which uses keymap definitions from lua/eric/keymaps.lua
+--
 -- Uncomment below to revert to inline keymaps:
 -- vim.keymap.set("n", "<Esc>", "<cmd>nohlsearch<CR>")
 -- vim.keymap.set("n", "<leader>q", vim.diagnostic.setloclist, { desc = "Open diagnostic [Q]uickfix list" })
@@ -40,9 +43,6 @@ vim.o.confirm = true
 -- vim.keymap.set("n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to the right window" })
 -- vim.keymap.set("n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to the lower window" })
 -- vim.keymap.set("n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to the upper window" })
-
--- Load centralized keymaps
-require("eric.keymaps").setup()
 
 -- TODO: Look at this
 vim.api.nvim_create_autocmd("TextYankPost", {

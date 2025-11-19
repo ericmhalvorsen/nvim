@@ -32,71 +32,32 @@ return {
     -- ============================================================================
     -- Keymaps are now centralized in lua/eric/keymaps.lua
     -- ============================================================================
-    -- Setup commander keymap
-    require("eric.keymaps").setup_commander_keymaps()
+    local keymaps = require "eric.keymaps"
 
-    -- Add all keymaps to commander for discoverability
-    -- set = false prevents double registration since keymaps are already set in keymaps.lua
+    -- Setup commander keymap (<leader>p to open commander)
+    vim.keymap.set("n", "<leader>p", commander.show, { desc = "Open commander" })
+
+    -- Collect all keymaps from keymaps.lua
+    local all_keymaps = {}
+
+    -- Add core keymaps (editor + windows)
+    vim.list_extend(all_keymaps, keymaps.core_keymaps)
+
+    -- Add telescope keymaps
+    vim.list_extend(all_keymaps, keymaps.get_telescope_keymaps())
+
+    -- Add floaterm keymaps
+    vim.list_extend(all_keymaps, keymaps.floaterm_keymaps)
+
+    -- Note: Keymaps from plugin 'keys' fields (neo-tree, debug, conform) are
+    -- automatically picked up by lazy.nvim integration
+
+    -- Note: Buffer-local keymaps (gitsigns, LSP) are set on buffer attach
+    -- and can't be globally registered, but we can still show them in commander
+    -- for reference/discovery (with set = false to prevent registration)
+
     commander.add({
-      -- Core Editor
-      { desc = "Clear search highlighting", cmd = "<cmd>nohlsearch<CR>", keys = { "n", "<Esc>" }, cat = "editor" },
-      { desc = "Open diagnostic quickfix list", cmd = vim.diagnostic.setloclist, keys = { "n", "<leader>q" }, cat = "editor" },
-      { desc = "Exit terminal mode", cmd = "<C-\\><C-n>", keys = { "t", "<Esc><Esc>" }, cat = "editor" },
-
-      -- Window Navigation
-      { desc = "Move focus to left window", cmd = "<C-w><C-h>", keys = { "n", "<C-h>" }, cat = "windows" },
-      { desc = "Move focus to right window", cmd = "<C-w><C-l>", keys = { "n", "<C-l>" }, cat = "windows" },
-      { desc = "Move focus to lower window", cmd = "<C-w><C-j>", keys = { "n", "<C-j>" }, cat = "windows" },
-      { desc = "Move focus to upper window", cmd = "<C-w><C-k>", keys = { "n", "<C-k>" }, cat = "windows" },
-
-      -- Telescope
-      { desc = "Search Help", cmd = "<cmd>Telescope help_tags<CR>", keys = { "n", "<leader>sh" }, cat = "telescope" },
-      { desc = "Search Keymaps", cmd = "<cmd>Telescope keymaps<CR>", keys = { "n", "<leader>sk" }, cat = "telescope" },
-      { desc = "Search Files", cmd = "<cmd>Telescope find_files<CR>", keys = { "n", "<leader>sp" }, cat = "telescope" },
-      { desc = "Search Telescope pickers", cmd = "<cmd>Telescope builtin<CR>", keys = { "n", "<leader>ss" }, cat = "telescope" },
-      { desc = "Search current Word", cmd = "<cmd>Telescope grep_string<CR>", keys = { "n", "<leader>sw" }, cat = "telescope" },
-      { desc = "Search by Grep", cmd = "<cmd>Telescope live_grep<CR>", keys = { "n", "<leader>sf" }, cat = "telescope" },
-      { desc = "Search Diagnostics", cmd = "<cmd>Telescope diagnostics<CR>", keys = { "n", "<leader>sd" }, cat = "telescope" },
-      { desc = "Search Resume", cmd = "<cmd>Telescope resume<CR>", keys = { "n", "<leader>sr" }, cat = "telescope" },
-      { desc = "Search Recent Files", cmd = "<cmd>Telescope oldfiles<CR>", keys = { "n", "<leader>s." }, cat = "telescope" },
-      { desc = "Find existing buffers", cmd = "<cmd>Telescope buffers<CR>", keys = { "n", "<leader><leader>" }, cat = "telescope" },
-      {
-        desc = "Fuzzily search in current buffer",
-        cmd = function()
-          require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
-            winblend = 10,
-            previewer = false,
-          })
-        end,
-        keys = { "n", "<leader>/" },
-        cat = "telescope",
-      },
-      {
-        desc = "Search in Open Files",
-        cmd = function()
-          require("telescope.builtin").live_grep {
-            grep_open_files = true,
-            prompt_title = "Live Grep in Open Files",
-          }
-        end,
-        keys = { "n", "<leader>s/" },
-        cat = "telescope",
-      },
-      {
-        desc = "Search Neovim files",
-        cmd = function()
-          require("telescope.builtin").find_files { cwd = vim.fn.stdpath "config" }
-        end,
-        keys = { "n", "<leader>sn" },
-        cat = "telescope",
-      },
-
-      -- Neo-tree
-      { desc = "NeoTree reveal", cmd = "<cmd>Neotree reveal<CR>", keys = { "n", "\\" }, cat = "file-tree" },
-      { desc = "NeoTree left side", cmd = "<cmd>Neotree left<CR>", keys = { "n", "<leader><C-l>" }, cat = "file-tree" },
-      { desc = "NeoTree float", cmd = "<cmd>Neotree float<CR>", keys = { "n", "<leader><C-f>" }, cat = "file-tree" },
-
-      -- Git (Gitsigns) - These are buffer-local so we show them for reference
+      -- Git (Gitsigns) - buffer-local, shown for reference only
       {
         desc = "Jump to next git change",
         cmd = function()
@@ -132,80 +93,7 @@ return {
       { desc = "Toggle git show blame line", cmd = "<cmd>Gitsigns toggle_current_line_blame<CR>", keys = { "n", "<leader>tb" }, cat = "git" },
       { desc = "Toggle git show Deleted", cmd = "<cmd>Gitsigns preview_hunk_inline<CR>", keys = { "n", "<leader>tD" }, cat = "git" },
 
-      -- Terminal (Floaterm)
-      { desc = "Toggle terminal", cmd = "<cmd>FloatermToggle<CR>", keys = { "n", "<leader>tt" }, cat = "terminal" },
-      { desc = "New terminal", cmd = "<cmd>FloatermNew<CR>", keys = { "n", "<leader>ta" }, cat = "terminal" },
-      { desc = "Cycle terminal instance", cmd = "<cmd>FloatermNext<CR>", keys = { "n", "<leader>tn" }, cat = "terminal" },
-
-      -- Debug (DAP)
-      {
-        desc = "Debug: Start/Continue",
-        cmd = function()
-          require("dap").continue()
-        end,
-        keys = { "n", "<F5>" },
-        cat = "debug",
-      },
-      {
-        desc = "Debug: Step Into",
-        cmd = function()
-          require("dap").step_into()
-        end,
-        keys = { "n", "<F1>" },
-        cat = "debug",
-      },
-      {
-        desc = "Debug: Step Over",
-        cmd = function()
-          require("dap").step_over()
-        end,
-        keys = { "n", "<F2>" },
-        cat = "debug",
-      },
-      {
-        desc = "Debug: Step Out",
-        cmd = function()
-          require("dap").step_out()
-        end,
-        keys = { "n", "<F3>" },
-        cat = "debug",
-      },
-      {
-        desc = "Debug: Toggle Breakpoint",
-        cmd = function()
-          require("dap").toggle_breakpoint()
-        end,
-        keys = { "n", "<leader>b" },
-        cat = "debug",
-      },
-      {
-        desc = "Debug: Set Breakpoint",
-        cmd = function()
-          require("dap").set_breakpoint(vim.fn.input "Breakpoint condition: ")
-        end,
-        keys = { "n", "<leader>B" },
-        cat = "debug",
-      },
-      {
-        desc = "Debug: Toggle UI",
-        cmd = function()
-          require("dapui").toggle()
-        end,
-        keys = { "n", "<F7>" },
-        cat = "debug",
-      },
-
-      -- Format
-      {
-        desc = "Format buffer",
-        cmd = function()
-          require("conform").format { async = true, lsp_format = "fallback" }
-        end,
-        keys = { "n", "<leader>f" },
-        cat = "format",
-      },
-
-      -- LSP (These are buffer-local and set on LspAttach, shown here for reference)
+      -- LSP - buffer-local, shown for reference only
       { desc = "LSP: Rename", cmd = vim.lsp.buf.rename, keys = { "n", "grn" }, cat = "lsp" },
       { desc = "LSP: Code Action", cmd = vim.lsp.buf.code_action, keys = { "n", "gra" }, cat = "lsp" },
       { desc = "LSP: References", cmd = "<cmd>Telescope lsp_references<CR>", keys = { "n", "grr" }, cat = "lsp" },
@@ -225,6 +113,9 @@ return {
         cat = "lsp",
       },
     }, { set = false })
+
+    -- Add keymaps from keymaps.lua (these will be registered by commander)
+    commander.add(all_keymaps)
 
     -- Uncomment below to revert to simple commander setup:
     -- commander.add({ { desc = "Open commander", cmd = commander.show, keys = { "n", "<leader>p" } } }, {})

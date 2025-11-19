@@ -66,7 +66,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
     -- ============================================================================
     -- Keymaps are now centralized in lua/eric/keymaps.lua
     -- ============================================================================
-    require("eric.keymaps").setup_telescope_keymaps()
+    -- Keymaps are registered by commander.nvim (see lua/eric/plugins/commander.lua)
 
     -- Uncomment below to revert to inline keymaps:
     -- local builtin = require "telescope.builtin"
