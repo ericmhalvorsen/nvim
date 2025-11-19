@@ -28,6 +28,13 @@ return {
         },
       },
     }
-    commander.add({ { desc = "Open commander", cmd = commander.show, keys = { "n", "<leader>p" } } }, {})
+
+    local keymaps = require "eric.keymaps"
+
+    -- Basically just <leader>p to open
+    keymaps.add_commander_keymaps()
+
+    -- put em all in for easy use
+    commander.add(keymaps.registered_keymaps)
   end,
 }

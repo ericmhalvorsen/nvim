@@ -12,20 +12,7 @@ return {
     vim.api.nvim_create_autocmd("LspAttach", {
       group = vim.api.nvim_create_augroup("lsp-attach", { clear = true }),
       callback = function(event)
-        local map = function(keys, func, desc, mode)
-          mode = mode or "n"
-          vim.keymap.set(mode, keys, func, { buffer = event.buf, desc = "LSP: " .. desc })
-        end
-
-        map("grn", vim.lsp.buf.rename, "[R]e[n]ame")
-        map("gra", vim.lsp.buf.code_action, "[G]oto Code [A]ction", { "n", "x" })
-        map("grr", require("telescope.builtin").lsp_references, "[G]oto [R]eferences")
-        map("gri", require("telescope.builtin").lsp_implementations, "[G]oto [I]mplementation")
-        map("grd", require("telescope.builtin").lsp_definitions, "[G]oto [D]efinition")
-        map("grD", vim.lsp.buf.declaration, "[G]oto [D]eclaration")
-        map("gO", require("telescope.builtin").lsp_document_symbols, "Open Document Symbols")
-        map("gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, "Open Workspace Symbols")
-        map("grt", require("telescope.builtin").lsp_type_definitions, "[G]oto [T]ype Definition")
+        require("eric.keymaps").add_lsp_keymaps(event)
 
         -- This function resolves a difference between neovim nightly (version 0.11) and stable (version 0.10)
         ---@param client vim.lsp.Client
@@ -63,16 +50,6 @@ return {
             end,
           })
         end
-
-        if client and client_supports_method(client, vim.lsp.protocol.Methods.textDocument_inlayHint, event.buf) then
-          map("<leader>th", function()
-            vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-          end, "[T]oggle Inlay [H]ints")
-        end
-
-        -- if client and client.server_capabilities.completionProvider and client.name ~= "minuet" then
-        --   vim.lsp.completion.enable(true, client.id, event.buf, { autotrigger = true })
-        -- end
       end,
     })
 
@@ -107,19 +84,6 @@ return {
     local capabilities = require("blink.cmp").get_lsp_capabilities()
 
     local servers = {
-      -- clangd = {},
-      -- gopls = {},
-      -- pyright = {},
-      -- rust_analyzer = {},
-      -- ... etc. See `:help lspconfig-all` for a list of all the pre-configured LSPs
-      --
-      -- Some languages (like typescript) have entire language plugins that can be useful:
-      --    https://github.com/pmizio/typescript-tools.nvim
-      --
-      -- But for many setups, the LSP (`ts_ls`) will work just fine
-      -- ts_ls = {},
-      --
-
       lua_ls = {
         -- cmd = { ... },
         -- filetypes = { ... },
@@ -132,12 +96,21 @@ return {
           },
         },
       },
-
+      gopls = {},
+      clangd = {},
       pyright = {},
       ruby_lsp = {},
       rust_analyzer = {},
-      ts_ls = {},
-      elixir_ls = {},
+      ts_ls = {}, -- Keep in mind the
+      elixirls = {
+        cmd = { "elixir-ls" },
+        settings = {
+          elixirLS = {
+            dialyzerEnabled = false,
+            fetchDeps = false,
+          },
+        },
+      },
     }
 
     local ensure_installed = vim.tbl_keys(servers or {})
@@ -152,10 +125,18 @@ return {
       "isort",
       -- Ruby
       "rubocop",
-      -- Rust (rustfmt comes with rust_analyzer)
-      -- Elixir
-      "mix", -- Elixir formatter (built-in to Elixir)
+      -- Rust
+      "rustfmt",
+      -- Vuln
+      "trivy",
     })
+
+    -- UFO config (folding)
+    capabilities.textDocument.foldingRange = {
+      dynamicRegistration = false,
+      lineFoldingOnly = true,
+    }
+
     require("mason-tool-installer").setup { ensure_installed = ensure_installed }
     require("mason-lspconfig").setup {
       ensure_installed = {},
@@ -168,5 +149,6 @@ return {
         end,
       },
     }
+    require("ufo").setup()
   end,
 }
