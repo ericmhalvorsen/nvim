@@ -23,6 +23,3 @@ going to update the gif so if it's really out of date my bad.
 
 # TODO gif
 
-Don't do any of this if you're already using nvim, but you probably already
-know that. Plugins in lua/eric/plugins if you want to take any config.
-
