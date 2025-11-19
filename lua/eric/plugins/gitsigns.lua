@@ -6,7 +6,7 @@ return {
       -- Keymaps are now centralized in lua/eric/keymaps.lua
       -- ============================================================================
       on_attach = function(bufnr)
-        require("eric.keymaps").setup_gitsigns_keymaps(bufnr)
+        require("eric.keymaps").add_gitsigns_keymaps(bufnr)
       end,
       -- Uncomment below to revert to inline keymaps:
       -- on_attach = function(bufnr)
