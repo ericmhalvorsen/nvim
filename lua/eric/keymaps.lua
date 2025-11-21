@@ -31,6 +31,14 @@ function M.add_core_keymaps()
   M.register_keymap("windows", "n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to right window" })
   M.register_keymap("windows", "n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to lower window" })
   M.register_keymap("windows", "n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to upper window" })
+
+  M.register_keymap(
+    "telescope",
+    "n",
+    "<leader>sw",
+    "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand(\"<cword>\")})<cr>",
+    { desc = "Search for word under the cursor" }
+  )
 end
 
 function M.add_telescope_keymaps()
@@ -217,8 +225,40 @@ function M.add_commander_keymaps()
   M.register_keymap("commander", "n", "<leader>p", commander.show, { desc = "Open commander" })
 end
 
+function M.add_database_keymaps()
+  -- Main database UI toggle (defined in dadbod.lua plugin keys, registered here for commander)
+  M.register_keymap("database", "n", "<leader>D", "<cmd>DBUIToggle<CR>", { desc = "Toggle database UI" })
+
+  -- Additional database commands (these are available but not bound to keys by default)
+  -- Uncomment if you want quick access to these commands:
+  -- M.register_keymap("database", "n", "<leader>Da", "<cmd>DBUIAddConnection<CR>", { desc = "Add database connection" })
+  -- M.register_keymap("database", "n", "<leader>Df", "<cmd>DBUIFindBuffer<CR>", { desc = "Find database buffer" })
+  -- M.register_keymap("database", "n", "<leader>Dl", "<cmd>DBUILastQueryInfo<CR>", { desc = "Last query info" })
+end
+
+function M.add_yank_keymaps()
+  -- Yank history picker (defined in yanky.lua plugin keys, registered here for commander)
+  M.register_keymap("yank", "n", "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
+  M.register_keymap("yank", "x", "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
+
+  -- Note: The enhanced paste operations (p, P, gp, gP) and cycle keymaps (<c-p>, <c-n>)
+  -- are defined in yanky.lua plugin keys as they need to be available immediately on plugin load.
+  -- They work through Yanky's <Plug> mappings which are automatically registered.
+end
+
+function M.add_ecolog_keymaps()
+  -- Environment variable management (defined in ecolog.lua plugin keys, registered here for commander)
+  M.register_keymap("environment", "n", "<leader>ge", "<cmd>EcologGoto<cr>", { desc = "Go to env file" })
+  M.register_keymap("environment", "n", "<leader>ep", "<cmd>EcologPeek<cr>", { desc = "Peek env variable value" })
+  M.register_keymap("environment", "n", "<leader>es", "<cmd>EcologSelect<cr>", { desc = "Select/switch env file" })
+  M.register_keymap("environment", "n", "<leader>et", "<cmd>EcologShelterToggle<cr>", { desc = "Toggle env value masking" })
+end
+
 function M.setup()
   M.add_core_keymaps()
+  M.add_database_keymaps()
+  M.add_yank_keymaps()
+  M.add_ecolog_keymaps()
 end
 
 return M

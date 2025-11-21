@@ -101,7 +101,7 @@ return {
       pyright = {},
       ruby_lsp = {},
       rust_analyzer = {},
-      ts_ls = {}, -- Keep in mind the
+      -- ts_ls = {}, -- see typescript.lua
       elixirls = {
         cmd = { "elixir-ls" },
         settings = {
