@@ -225,8 +225,20 @@ function M.add_commander_keymaps()
   M.register_keymap("commander", "n", "<leader>p", commander.show, { desc = "Open commander" })
 end
 
+function M.add_database_keymaps()
+  -- Main database UI toggle (defined in dadbod.lua plugin keys, registered here for commander)
+  M.register_keymap("database", "n", "<leader>D", "<cmd>DBUIToggle<CR>", { desc = "Toggle database UI" })
+
+  -- Additional database commands (these are available but not bound to keys by default)
+  -- Uncomment if you want quick access to these commands:
+  -- M.register_keymap("database", "n", "<leader>Da", "<cmd>DBUIAddConnection<CR>", { desc = "Add database connection" })
+  -- M.register_keymap("database", "n", "<leader>Df", "<cmd>DBUIFindBuffer<CR>", { desc = "Find database buffer" })
+  -- M.register_keymap("database", "n", "<leader>Dl", "<cmd>DBUILastQueryInfo<CR>", { desc = "Last query info" })
+end
+
 function M.setup()
   M.add_core_keymaps()
+  M.add_database_keymaps()
 end
 
 return M

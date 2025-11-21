@@ -177,8 +177,10 @@ return { -- Autocompletion
         markdown = { "lsp", "path", "snippets", "buffer", "emoji", "nerdfont" },
         -- Git commits: emoji, nerdfont, and buffer
         gitcommit = { "emoji", "nerdfont", "buffer" },
-        -- SQL databases with dadbod (uncomment if you use vim-dadbod)
-        -- sql = { "lsp", "path", "snippets", "buffer", "dadbod" },
+        -- SQL databases with dadbod
+        sql = { "lsp", "path", "snippets", "buffer", "dadbod" },
+        mysql = { "lsp", "path", "snippets", "buffer", "dadbod" },
+        plsql = { "lsp", "path", "snippets", "buffer", "dadbod" },
         -- LaTeX with BibTeX (uncomment if you use LaTeX)
         -- tex = { "lsp", "path", "snippets", "buffer", "bibtex" },
       },
@@ -287,13 +289,12 @@ return { -- Autocompletion
         --   },
         -- },
 
-        -- Optional: Database completions (uncomment if using vim-dadbod)
-        -- Add "dadbod" to per_filetype sources for SQL files
-        -- dadbod = {
-        --   module = "vim_dadbod_completion.blink",
-        --   name = "DB",
-        --   score_offset = 85,
-        -- },
+        -- Database completions (vim-dadbod)
+        dadbod = {
+          module = "vim_dadbod_completion.blink",
+          name = "DB",
+          score_offset = 85,
+        },
 
         -- Optional: BibTeX citations for LaTeX (uncomment if using LaTeX)
         -- Uncomment dependency "krissen/blink-cmp-bibtex" and add "bibtex" to per_filetype sources
