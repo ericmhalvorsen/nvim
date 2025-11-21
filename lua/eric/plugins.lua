@@ -26,6 +26,7 @@ return {
   require "eric.plugins.todocomments",
   require "eric.plugins.transparent",
   require "eric.plugins.treesitter",
+  require "eric.plugins.typescript",
   require "eric.plugins.ufo",
   require "eric.plugins.whichkey",
 }

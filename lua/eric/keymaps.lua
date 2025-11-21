@@ -31,6 +31,14 @@ function M.add_core_keymaps()
   M.register_keymap("windows", "n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to right window" })
   M.register_keymap("windows", "n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to lower window" })
   M.register_keymap("windows", "n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to upper window" })
+
+  M.register_keymap(
+    "telescope",
+    "n",
+    "<leader>sw",
+    "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand(\"<cword>\")})<cr>",
+    { desc = "Search for word under the cursor" }
+  )
 end
 
 function M.add_telescope_keymaps()

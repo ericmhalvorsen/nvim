@@ -61,11 +61,11 @@ return { -- Autocompletion
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
-      --["<tab>"] = {
-      --  function(cmp)
-      --    cmp.show { providers = { "minuet" } }
-      --  end,
-      --},
+      ["<tab>"] = {
+        function(cmp)
+          cmp.show {}
+        end,
+      },
     },
 
     appearance = {
@@ -77,8 +77,22 @@ return { -- Autocompletion
     completion = {
       -- By default, you may press `<c-space>` to show the documentation.
       -- Optionally, set `auto_show = true` to show the documentation after a delay.
-      documentation = { auto_show = true, auto_show_delay_ms = 1000 },
-      trigger = { prefetch_on_insert = false },
+      -- documentation = { auto_show = true, auto_show_delay_ms = 500 },
+      -- trigger = { prefetch_on_insert = false },
+      documentation = {
+        auto_show = true,
+        auto_show_delay_ms = 100,
+        update_delay_ms = 50,
+        window = {
+          max_width = math.min(80, vim.o.columns),
+          border = "rounded",
+        },
+      },
+      list = {
+        selection = {
+          preselect = false,
+        },
+      },
     },
 
     sources = {
@@ -104,9 +118,9 @@ return { -- Autocompletion
     -- the rust implementation via `'prefer_rust_with_warning'`
     --
     -- See :h blink-cmp-config-fuzzy for more information
-    fuzzy = { implementation = "prefer_rust_with_warning" },
+    -- fuzzy = { implementation = "prefer_rust_with_warning" },
 
     -- Shows a signature help window while you type arguments for a function
-    signature = { enabled = true },
+    -- signature = { enabled = true },
   },
 }

@@ -4,6 +4,11 @@ vim.g.maplocalleader = " "
 
 vim.g.have_nerd_font = true
 
+-- Disable unused providers
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_ruby_provider = 0
+vim.g.loaded_python3_provider = 0
+
 vim.o.number = true
 vim.o.mouse = "a"
 vim.o.showmode = true
@@ -29,9 +34,7 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 
-vim.keymap.set("n", "<leader><f2>", "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand(\"<cword>\")})<cr>", {})
-
-require("eric.keymaps").setup()
+local keymaps = require "eric.keymaps"
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
@@ -40,3 +43,31 @@ vim.api.nvim_create_autocmd("TextYankPost", {
     vim.hl.on_yank()
   end,
 })
+
+vim.api.nvim_create_autocmd("FileType", {
+  pattern = "qf",
+  desc = "Attach keymaps for quickfix list",
+  callback = function()
+    keymaps.register_keymap("quickfix", "n", "d", function()
+      local qf_list = vim.fn.getqflist()
+
+      local current_line_number = vim.fn.line "."
+
+      if qf_list[current_line_number] then
+        table.remove(qf_list, current_line_number)
+
+        vim.fn.setqflist(qf_list, "r")
+
+        local new_line_number = math.min(current_line_number, #qf_list)
+        vim.fn.cursor(new_line_number, 1)
+      end
+    end, {
+      buffer = true,
+      noremap = true,
+      silent = true,
+      desc = "Remove quickfix item under cursor",
+    })
+  end,
+})
+
+keymaps.setup()
