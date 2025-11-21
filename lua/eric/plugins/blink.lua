@@ -162,17 +162,17 @@ return { -- Autocompletion
 
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "buffer", "lazydev", "ecolog", "yank", "calc", "emoji", "nerdfont" },
+      default = { "lsp", "path", "snippets", "buffer", "lazydev", "yank", "calc", "emoji", "nerdfont" },
 
       -- Per-filetype sources
       per_filetype = {
-        -- Enable emoji, nerdfont, and thesaurus for markdown
-        markdown = { "lsp", "path", "snippets", "buffer", "thesaurus", "emoji", "nerdfont" },
+        -- Enable emoji, nerdfont, and words (thesaurus) for markdown
+        markdown = { "lsp", "path", "snippets", "buffer", "words", "emoji", "nerdfont" },
         -- Git commits: gitmoji (semantic commit emojis), nerdfont, and buffer
         gitcommit = { "gitmoji", "nerdfont", "buffer" },
-        -- Text files: dictionary for word definitions
-        text = { "lsp", "path", "snippets", "buffer", "dictionary" },
-        txt = { "lsp", "path", "snippets", "buffer", "dictionary" },
+        -- Text files: words (dictionary with definitions)
+        text = { "lsp", "path", "snippets", "buffer", "words" },
+        txt = { "lsp", "path", "snippets", "buffer", "words" },
         -- SQL databases with dadbod
         sql = { "lsp", "path", "snippets", "buffer", "dadbod" },
         mysql = { "lsp", "path", "snippets", "buffer", "dadbod" },
@@ -190,12 +190,13 @@ return { -- Autocompletion
           score_offset = 100,
         },
 
-        -- Ecolog: Environment variable completions from .env files
-        ecolog = {
-          module = "ecolog.integrations.cmp.blink_cmp",
-          name = "Ecolog",
-          score_offset = 95,
-        },
+        -- Ecolog: Environment variable completions from .env files (DISABLED - module not found)
+        -- Uncomment when ecolog blink.cmp integration is available
+        -- ecolog = {
+        --   module = "ecolog.integrations.cmp.blink_cmp",
+        --   name = "Ecolog",
+        --   score_offset = 95,
+        -- },
 
         -- LSP: High priority for language server completions
         lsp = {
@@ -286,21 +287,12 @@ return { -- Autocompletion
           async = true,
         },
 
-        -- Dictionary: Word definitions using WordNet (text files)
-        dictionary = {
-          module = "blink-cmp-words.dictionary",
-          name = "Dictionary",
-          score_offset = 40,
-          opts = {
-            dictionary_search_threshold = 3, -- Minimum characters to trigger
-            definition_pointers = { "!", "&", "^" }, -- WordNet pointer symbols
-          },
-        },
-
-        -- Thesaurus: Synonym suggestions using WordNet (markdown)
-        thesaurus = {
+        -- Words: Dictionary + Thesaurus using WordNet
+        -- Provides word completions with definitions shown in documentation window
+        -- Includes synonyms, antonyms, and related words
+        words = {
           module = "blink-cmp-words.thesaurus",
-          name = "Thesaurus",
+          name = "Words",
           score_offset = 45,
           opts = {
             definition_pointers = { "!", "&", "^" }, -- Antonyms, similar-to, also-see
