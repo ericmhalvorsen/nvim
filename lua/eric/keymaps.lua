@@ -358,7 +358,6 @@ end
 
 function M.setup()
   M.add_core_keymaps()
-  M.add_telescope_keymaps()
   M.add_floaterm_keymaps()
   M.add_commander_keymaps()
   M.add_codecompanion_keymaps()
