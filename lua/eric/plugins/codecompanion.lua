@@ -22,8 +22,9 @@ return {
     "stevearc/dressing.nvim", -- Optional: improves UI
   },
   config = function()
+    local keymaps = require "eric.keymaps"
+
     require("codecompanion").setup {
-      -- Adapter configuration
       adapters = {
         http = {
           -- Anthropic/Claude adapter with custom API key script
@@ -81,93 +82,9 @@ return {
 
       -- Strategy configuration
       strategies = {
-        -- Chat strategy (main interface)
         chat = {
-          adapter = "anthropic", -- Default adapter for chat
-          keymaps = {
-            send = {
-              modes = {
-                n = "<C-s>",
-                i = "<C-s>",
-              },
-              index = 1,
-              callback = "keymaps.send",
-              description = "Send message",
-            },
-            close = {
-              modes = {
-                n = "q",
-                i = "<C-c>",
-              },
-              index = 2,
-              callback = "keymaps.close",
-              description = "Close chat",
-            },
-            stop = {
-              modes = {
-                n = "<C-c>",
-              },
-              index = 3,
-              callback = "keymaps.stop",
-              description = "Stop request",
-            },
-            regenerate = {
-              modes = {
-                n = "gr",
-              },
-              index = 4,
-              callback = "keymaps.regenerate",
-              description = "Regenerate response",
-            },
-            codeblock = {
-              modes = {
-                n = "gc",
-              },
-              index = 5,
-              callback = "keymaps.codeblock",
-              description = "Insert codeblock",
-            },
-            yank_code = {
-              modes = {
-                n = "gy",
-              },
-              index = 6,
-              callback = "keymaps.yank_code",
-              description = "Yank code",
-            },
-            next_chat = {
-              modes = {
-                n = "}",
-              },
-              index = 7,
-              callback = "keymaps.next_chat",
-              description = "Next chat",
-            },
-            previous_chat = {
-              modes = {
-                n = "{",
-              },
-              index = 8,
-              callback = "keymaps.previous_chat",
-              description = "Previous chat",
-            },
-            next_header = {
-              modes = {
-                n = "]]",
-              },
-              index = 9,
-              callback = "keymaps.next_header",
-              description = "Next header",
-            },
-            previous_header = {
-              modes = {
-                n = "[[",
-              },
-              index = 10,
-              callback = "keymaps.previous_header",
-              description = "Previous header",
-            },
-          },
+          adapter = "anthropic",
+          keymaps = keymaps.get_codecompanion_chat_keys(),
           opts = {
             -- Blink.cmp integration for chat completion
             completion_provider = "blink", -- Options: blink|cmp|coc|default
@@ -222,30 +139,9 @@ You carefully provide accurate, factual, thoughtful answers, and are a genius at
           },
         },
 
-        -- Inline strategy (Cursor-like inline editing)
         inline = {
           adapter = "anthropic",
-          keymaps = {
-            accept_change = {
-              modes = {
-                n = "ga",
-              },
-              index = 1,
-              callback = "keymaps.accept_change",
-              description = "Accept change",
-            },
-            reject_change = {
-              modes = {
-                n = "gr",
-              },
-              index = 2,
-              callback = "keymaps.reject_change",
-              description = "Reject change",
-              opts = {
-                nowait = true,
-              },
-            },
-          },
+          keymaps = keymaps.get_codecompanion_inline_keys(),
         },
 
         -- Command strategy (for Neovim commands)
@@ -330,26 +226,6 @@ You carefully provide accurate, factual, thoughtful answers, and are a genius at
       },
     }
 
-    -- Set up keymaps
-    local keymap = vim.keymap.set
-    local opts = { noremap = true, silent = true }
-
-    -- Main actions menu (like Ctrl+K in Cursor)
-    keymap({ "n", "v" }, "<C-a>", "<cmd>CodeCompanionActions<cr>", vim.tbl_extend("force", opts, { desc = "CodeCompanion Actions" }))
-
-    -- Toggle chat
-    keymap({ "n", "v" }, "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", vim.tbl_extend("force", opts, { desc = "Toggle CodeCompanion Chat" }))
-
-    -- Add visual selection to chat
-    keymap("v", "<LocalLeader>aa", "<cmd>CodeCompanionChat Add<cr>", vim.tbl_extend("force", opts, { desc = "Add selection to chat" }))
-
-    -- Inline assistant (like Cursor inline editing)
-    keymap({ "n", "v" }, "<LocalLeader>ai", "<cmd>CodeCompanion<cr>", vim.tbl_extend("force", opts, { desc = "Inline AI assistant" }))
-
-    -- Quick chat
-    keymap("n", "<LocalLeader>ac", "<cmd>CodeCompanionChat<cr>", vim.tbl_extend("force", opts, { desc = "New CodeCompanion chat" }))
-
-    -- Command abbreviation for quick access
-    vim.cmd [[cab cc CodeCompanion]]
+    keymaps.add_codecompanion_keymaps()
   end,
 }
