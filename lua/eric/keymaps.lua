@@ -246,10 +246,19 @@ function M.add_yank_keymaps()
   -- They work through Yanky's <Plug> mappings which are automatically registered.
 end
 
+function M.add_ecolog_keymaps()
+  -- Environment variable management (defined in ecolog.lua plugin keys, registered here for commander)
+  M.register_keymap("environment", "n", "<leader>ge", "<cmd>EcologGoto<cr>", { desc = "Go to env file" })
+  M.register_keymap("environment", "n", "<leader>ep", "<cmd>EcologPeek<cr>", { desc = "Peek env variable value" })
+  M.register_keymap("environment", "n", "<leader>es", "<cmd>EcologSelect<cr>", { desc = "Select/switch env file" })
+  M.register_keymap("environment", "n", "<leader>et", "<cmd>EcologShelterToggle<cr>", { desc = "Toggle env value masking" })
+end
+
 function M.setup()
   M.add_core_keymaps()
   M.add_database_keymaps()
   M.add_yank_keymaps()
+  M.add_ecolog_keymaps()
 end
 
 return M

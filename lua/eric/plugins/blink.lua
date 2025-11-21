@@ -170,7 +170,7 @@ return { -- Autocompletion
 
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "buffer", "lazydev", "yank", "calc", "emoji", "nerdfont" },
+      default = { "lsp", "path", "snippets", "buffer", "lazydev", "ecolog", "yank", "calc", "emoji", "nerdfont" },
 
       -- Per-filetype sources
       per_filetype = {
@@ -193,6 +193,13 @@ return { -- Autocompletion
           module = "lazydev.integrations.blink",
           name = "LazyDev",
           score_offset = 100,
+        },
+
+        -- Ecolog: Environment variable completions from .env files
+        ecolog = {
+          module = "ecolog.integrations.cmp.blink_cmp",
+          name = "Ecolog",
+          score_offset = 95,
         },
 
         -- LSP: High priority for language server completions
