@@ -7,8 +7,7 @@ return {
     "kevinhwang91/nvim-ufo",
   },
   config = function()
-    local commander = require "commander"
-    commander.setup {
+    require("commander").setup {
       components = {
         "DESC",
         "KEYS",
@@ -33,8 +32,5 @@ return {
         },
       },
     }
-
-    local keymaps = require "eric.keymaps"
-    commander.add(keymaps.registered_keymaps)
   end,
 }

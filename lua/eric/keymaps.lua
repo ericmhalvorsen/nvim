@@ -357,11 +357,15 @@ function M.add_ufo_keymaps()
 end
 
 function M.setup()
+  M.add_telescope_keymaps()
   M.add_core_keymaps()
   M.add_floaterm_keymaps()
   M.add_commander_keymaps()
   M.add_codecompanion_keymaps()
   M.add_ufo_keymaps()
+
+  local keymaps = require "eric.keymaps"
+  require("commander").add(keymaps.registered_keymaps, {})
 end
 
 return M
