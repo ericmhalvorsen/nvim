@@ -36,6 +36,7 @@ return { -- Autocompletion
     "MahanRahmati/blink-nerdfont.nvim",
     "marcoSven/blink-cmp-yanky", -- Yank history completion
     "Dynge/gitmoji.nvim", -- Semantic commit message emojis
+    "archie-judd/blink-cmp-words", -- Dictionary and thesaurus (WordNet)
     "saghen/blink.compat", -- Compatibility layer for nvim-cmp sources
     -- Optional sources (uncomment to enable):
     -- "mikavilpas/blink-ripgrep.nvim", -- Ripgrep search across project
@@ -175,10 +176,13 @@ return { -- Autocompletion
 
       -- Per-filetype sources
       per_filetype = {
-        -- Enable emoji and nerdfont for markdown
-        markdown = { "lsp", "path", "snippets", "buffer", "emoji", "nerdfont" },
+        -- Enable emoji, nerdfont, and thesaurus for markdown
+        markdown = { "lsp", "path", "snippets", "buffer", "thesaurus", "emoji", "nerdfont" },
         -- Git commits: gitmoji (semantic commit emojis), nerdfont, and buffer
         gitcommit = { "gitmoji", "nerdfont", "buffer" },
+        -- Text files: dictionary for word definitions
+        text = { "lsp", "path", "snippets", "buffer", "dictionary" },
+        txt = { "lsp", "path", "snippets", "buffer", "dictionary" },
         -- SQL databases with dadbod
         sql = { "lsp", "path", "snippets", "buffer", "dadbod" },
         mysql = { "lsp", "path", "snippets", "buffer", "dadbod" },
@@ -290,6 +294,29 @@ return { -- Autocompletion
           score_offset = 10,
           timeout_ms = 10000,
           async = true,
+        },
+
+        -- Dictionary: Word definitions using WordNet (text files)
+        dictionary = {
+          module = "blink-cmp-words.dictionary",
+          name = "Dictionary",
+          score_offset = 40,
+          opts = {
+            dictionary_search_threshold = 3, -- Minimum characters to trigger
+            definition_pointers = { "!", "&", "^" }, -- WordNet pointer symbols
+          },
+        },
+
+        -- Thesaurus: Synonym suggestions using WordNet (markdown)
+        thesaurus = {
+          module = "blink-cmp-words.thesaurus",
+          name = "Thesaurus",
+          score_offset = 45,
+          opts = {
+            definition_pointers = { "!", "&", "^" }, -- Antonyms, similar-to, also-see
+            similarity_pointers = { "&", "^" }, -- Similar-to, also-see
+            similarity_depth = 2, -- How deep to search for synonyms
+          },
         },
 
         -- Optional: Ripgrep (search entire project - can be slow on large projects)
