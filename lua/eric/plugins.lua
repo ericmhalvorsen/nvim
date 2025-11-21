@@ -5,9 +5,8 @@ local plugins = {}
 
 -- Files to skip (useful for disabling plugins temporarily)
 local skip_list = {
-  -- "avante.lua",     -- Uncomment to disable avante
-  -- "minuet.lua",     -- Uncomment to disable minuet
-  -- "ecolog.lua",     -- Uncomment if ecolog causes issues
+  "avante.lua",     -- Disabled
+  "minuet.lua",     -- Disabled
 }
 
 -- Get the plugins directory path
