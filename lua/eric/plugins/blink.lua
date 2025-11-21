@@ -34,6 +34,7 @@ return { -- Autocompletion
     -- Additional completion sources
     "moyiz/blink-emoji.nvim",
     "MahanRahmati/blink-nerdfont.nvim",
+    "marcoSven/blink-cmp-yanky", -- Yank history completion
     "saghen/blink.compat", -- Compatibility layer for nvim-cmp sources
     -- Optional sources (uncomment to enable):
     -- "mikavilpas/blink-ripgrep.nvim", -- Ripgrep search across project
@@ -169,7 +170,7 @@ return { -- Autocompletion
 
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "buffer", "lazydev", "calc", "emoji", "nerdfont" },
+      default = { "lsp", "path", "snippets", "buffer", "lazydev", "yank", "calc", "emoji", "nerdfont" },
 
       -- Per-filetype sources
       per_filetype = {
@@ -217,6 +218,18 @@ return { -- Autocompletion
           name = "Buffer",
           score_offset = 60,
           max_items = 5, -- Limit buffer completions to avoid clutter
+        },
+
+        -- Yank: Clipboard history from yanky.nvim
+        yank = {
+          module = "blink-yanky",
+          name = "Yank",
+          score_offset = 55,
+          opts = {
+            minLength = 3, -- Minimum yank length to show in completion
+            onlyCurrentFiletype = false, -- Show yanks from all filetypes
+            insert = true, -- Insert the yank on selection
+          },
         },
 
         -- Calc: Math calculations (e.g., type "2+2" get "4")

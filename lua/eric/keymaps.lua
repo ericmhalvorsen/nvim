@@ -236,9 +236,20 @@ function M.add_database_keymaps()
   -- M.register_keymap("database", "n", "<leader>Dl", "<cmd>DBUILastQueryInfo<CR>", { desc = "Last query info" })
 end
 
+function M.add_yank_keymaps()
+  -- Yank history picker (defined in yanky.lua plugin keys, registered here for commander)
+  M.register_keymap("yank", "n", "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
+  M.register_keymap("yank", "x", "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
+
+  -- Note: The enhanced paste operations (p, P, gp, gP) and cycle keymaps (<c-p>, <c-n>)
+  -- are defined in yanky.lua plugin keys as they need to be available immediately on plugin load.
+  -- They work through Yanky's <Plug> mappings which are automatically registered.
+end
+
 function M.setup()
   M.add_core_keymaps()
   M.add_database_keymaps()
+  M.add_yank_keymaps()
 end
 
 return M
