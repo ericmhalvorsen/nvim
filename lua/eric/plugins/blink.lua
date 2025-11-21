@@ -33,7 +33,12 @@ return { -- Autocompletion
     "milanglacier/minuet-ai.nvim",
     -- Additional completion sources
     "moyiz/blink-emoji.nvim",
+    "MahanRahmati/blink-nerdfont.nvim",
     "saghen/blink.compat", -- Compatibility layer for nvim-cmp sources
+    -- Optional sources (uncomment to enable):
+    -- "mikavilpas/blink-ripgrep.nvim", -- Ripgrep search across project
+    -- "Kaiser-Yang/blink-cmp-git", -- Git commits/issues/PRs
+    -- "krissen/blink-cmp-bibtex", -- BibTeX citations for LaTeX
   },
   --- @module 'blink.cmp'
   --- @type blink.cmp.Config
@@ -164,15 +169,18 @@ return { -- Autocompletion
 
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "buffer", "lazydev", "calc", "emoji" },
+      default = { "lsp", "path", "snippets", "buffer", "lazydev", "calc", "emoji", "nerdfont" },
 
-      -- Per-filetype sources (examples commented out)
+      -- Per-filetype sources
       per_filetype = {
-        -- Enable emoji for markdown and git commits
-        markdown = { "lsp", "path", "snippets", "buffer", "emoji" },
-        gitcommit = { "emoji", "buffer" },
+        -- Enable emoji and nerdfont for markdown
+        markdown = { "lsp", "path", "snippets", "buffer", "emoji", "nerdfont" },
+        -- Git commits: emoji, nerdfont, and buffer
+        gitcommit = { "emoji", "nerdfont", "buffer" },
         -- SQL databases with dadbod (uncomment if you use vim-dadbod)
         -- sql = { "lsp", "path", "snippets", "buffer", "dadbod" },
+        -- LaTeX with BibTeX (uncomment if you use LaTeX)
+        -- tex = { "lsp", "path", "snippets", "buffer", "bibtex" },
       },
 
       -- Provider configuration with score offsets for prioritization
@@ -196,6 +204,19 @@ return { -- Autocompletion
           score_offset = 85,
         },
 
+        -- Path: File path completions
+        path = {
+          name = "Path",
+          score_offset = 75,
+        },
+
+        -- Buffer: Text from current buffer (higher priority - contextually relevant!)
+        buffer = {
+          name = "Buffer",
+          score_offset = 60,
+          max_items = 5, -- Limit buffer completions to avoid clutter
+        },
+
         -- Calc: Math calculations (e.g., type "2+2" get "4")
         calc = {
           module = "blink.compat.source",
@@ -217,17 +238,14 @@ return { -- Autocompletion
           },
         },
 
-        -- Path: File path completions
-        path = {
-          name = "Path",
-          score_offset = 75,
-        },
-
-        -- Buffer: Text from current buffer (lower priority)
-        buffer = {
-          name = "Buffer",
-          score_offset = 10,
-          max_items = 5, -- Limit buffer completions to avoid clutter
+        -- Nerdfont: Nerd font icon completions triggered by ":"
+        nerdfont = {
+          module = "blink-nerdfont",
+          name = "Nerd Fonts",
+          score_offset = 15,
+          opts = {
+            insert = true, -- Insert icon instead of keeping text
+          },
         },
 
         -- Minuet: AI completions (manual trigger)
@@ -239,11 +257,54 @@ return { -- Autocompletion
           async = true,
         },
 
+        -- Optional: Ripgrep (search entire project - can be slow on large projects)
+        -- Uncomment dependency "mikavilpas/blink-ripgrep.nvim" and add "ripgrep" to sources.default
+        -- ripgrep = {
+        --   module = "blink-ripgrep",
+        --   name = "Ripgrep",
+        --   score_offset = 20,
+        --   opts = {
+        --     prefix_min_len = 3, -- Minimum characters before triggering
+        --     get_command = function(_, prefix)
+        --       return { "rg", "--no-config", "--json", "--word-regexp", "--", prefix, "." }
+        --     end,
+        --     get_prefix = function(context)
+        --       return context.get_keyword_with_prefix()
+        --     end,
+        --   },
+        -- },
+
+        -- Optional: Git completions (commits, issues, PRs)
+        -- Uncomment dependency "Kaiser-Yang/blink-cmp-git" and add "git" to per_filetype sources
+        -- git = {
+        --   module = "blink-cmp-git",
+        --   name = "Git",
+        --   score_offset = 80,
+        --   opts = {
+        --     -- Configuration for git source
+        --     filetypes = { "gitcommit", "octo", "markdown" },
+        --     remotes = { "upstream", "origin" },
+        --   },
+        -- },
+
         -- Optional: Database completions (uncomment if using vim-dadbod)
+        -- Add "dadbod" to per_filetype sources for SQL files
         -- dadbod = {
         --   module = "vim_dadbod_completion.blink",
         --   name = "DB",
         --   score_offset = 85,
+        -- },
+
+        -- Optional: BibTeX citations for LaTeX (uncomment if using LaTeX)
+        -- Uncomment dependency "krissen/blink-cmp-bibtex" and add "bibtex" to per_filetype sources
+        -- bibtex = {
+        --   module = "blink-cmp-bibtex",
+        --   name = "BibTeX",
+        --   score_offset = 90,
+        --   opts = {
+        --     -- Configuration for bibtex source
+        --     ft_enable = { "tex", "markdown", "rmd" },
+        --   },
         -- },
       },
     },
