@@ -35,6 +35,7 @@ return { -- Autocompletion
     "moyiz/blink-emoji.nvim",
     "MahanRahmati/blink-nerdfont.nvim",
     "marcoSven/blink-cmp-yanky", -- Yank history completion
+    "Dynge/gitmoji.nvim", -- Semantic commit message emojis
     "saghen/blink.compat", -- Compatibility layer for nvim-cmp sources
     -- Optional sources (uncomment to enable):
     -- "mikavilpas/blink-ripgrep.nvim", -- Ripgrep search across project
@@ -176,8 +177,8 @@ return { -- Autocompletion
       per_filetype = {
         -- Enable emoji and nerdfont for markdown
         markdown = { "lsp", "path", "snippets", "buffer", "emoji", "nerdfont" },
-        -- Git commits: emoji, nerdfont, and buffer
-        gitcommit = { "emoji", "nerdfont", "buffer" },
+        -- Git commits: gitmoji (semantic commit emojis), nerdfont, and buffer
+        gitcommit = { "gitmoji", "nerdfont", "buffer" },
         -- SQL databases with dadbod
         sql = { "lsp", "path", "snippets", "buffer", "dadbod" },
         mysql = { "lsp", "path", "snippets", "buffer", "dadbod" },
@@ -257,6 +258,18 @@ return { -- Autocompletion
           score_offset = 15,
           opts = {
             insert = true, -- Insert emoji instead of keeping text
+          },
+        },
+
+        -- Gitmoji: Semantic commit message emojis with descriptions
+        gitmoji = {
+          module = "gitmoji.blink",
+          name = "Gitmoji",
+          score_offset = 90, -- High priority for commit messages
+          opts = {
+            filetypes = { "gitcommit" },
+            append_space = true, -- Add space after emoji
+            complete_as = "emoji", -- Options: "emoji" or "text"
           },
         },
 
