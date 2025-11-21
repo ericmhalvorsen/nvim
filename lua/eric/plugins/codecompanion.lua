@@ -225,7 +225,5 @@ You carefully provide accurate, factual, thoughtful answers, and are a genius at
         use_default_prompt_library = true,
       },
     }
-
-    keymaps.add_codecompanion_keymaps()
   end,
 }

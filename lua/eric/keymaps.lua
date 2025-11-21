@@ -363,4 +363,12 @@ function M.setup()
   M.add_ecolog_keymaps()
 end
 
+function M.register_all_plugin_keymaps()
+  M.add_telescope_keymaps()
+  M.add_floaterm_keymaps()
+  M.add_commander_keymaps()
+  M.add_codecompanion_keymaps()
+  M.add_ufo_keymaps()
+end
+
 return M

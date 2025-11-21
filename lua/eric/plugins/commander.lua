@@ -1,6 +1,11 @@
 return {
   "FeiyouG/commander.nvim",
-  dependencies = { "nvim-telescope/telescope.nvim" },
+  dependencies = {
+    "nvim-telescope/telescope.nvim",
+    "voldikss/vim-floaterm",
+    "olimorris/codecompanion.nvim",
+    "kevinhwang91/nvim-ufo",
+  },
   config = function()
     local commander = require "commander"
     commander.setup {
@@ -31,10 +36,8 @@ return {
 
     local keymaps = require "eric.keymaps"
 
-    -- Basically just <leader>p to open
-    keymaps.add_commander_keymaps()
+    keymaps.register_all_plugin_keymaps()
 
-    -- put em all in for easy use
     commander.add(keymaps.registered_keymaps)
   end,
 }
