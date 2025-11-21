@@ -358,12 +358,6 @@ end
 
 function M.setup()
   M.add_core_keymaps()
-  M.add_database_keymaps()
-  M.add_yank_keymaps()
-  M.add_ecolog_keymaps()
-end
-
-function M.register_all_plugin_keymaps()
   M.add_telescope_keymaps()
   M.add_floaterm_keymaps()
   M.add_commander_keymaps()

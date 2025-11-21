@@ -35,9 +35,6 @@ return {
     }
 
     local keymaps = require "eric.keymaps"
-
-    keymaps.register_all_plugin_keymaps()
-
     commander.add(keymaps.registered_keymaps)
   end,
 }
