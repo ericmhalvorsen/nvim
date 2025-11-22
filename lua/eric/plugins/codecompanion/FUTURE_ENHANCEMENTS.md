@@ -89,24 +89,25 @@ Ideas and features from `stuff_for_claude` that could be added in the future.
 
 ---
 
-### 5. ClaudeCode.nvim
+### 5. ClaudeCode.nvim ✅ **ADDED**
 **What it is**: Direct integration with Claude Code (Anthropic's official coding agent)
 
-**Location**: `stuff_for_claude/lua/plugins/llm.agent.lua`
+**Location**: `lua/eric/plugins/claudecode.lua` (already added!)
 
-**Setup**:
+**Setup**: Already configured with `claude-wrapper` executable
+
+**Usage**:
+- Press `<leader>cc` to toggle Claude Code panel
+- Uses your `claude-wrapper` from PATH
+
+**Configuration**: Edit `lua/eric/plugins/claudecode.lua` to customize:
 ```lua
-{
-  "coder/claudecode.nvim",
-  dependencies = { "folke/snacks.nvim" },
-  config = true,
-  keys = {
-    { "<leader>cc", "<cmd>ClaudeCode<cr>", desc = "Toggle Claude" },
-  },
+opts = {
+  claude_executable = "claude-wrapper",  -- Your wrapper
+  -- auto_open = false,  -- Don't auto-open
+  -- position = "right", -- Panel position
 }
 ```
-
-**To Add**: Copy to `lua/eric/plugins/claudecode.lua` when you want official Claude Code integration
 
 ---
 
