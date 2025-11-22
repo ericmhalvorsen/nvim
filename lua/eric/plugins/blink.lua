@@ -179,8 +179,7 @@ return { -- Autocompletion
         plsql = { "lsp", "path", "snippets", "buffer", "dadbod" },
         -- LaTeX with BibTeX (uncomment if you use LaTeX)
         -- tex = { "lsp", "path", "snippets", "buffer", "bibtex" },
-	        codecompanion = { "codecompanion" }, -- Enable codecompanion in chat buffers
-
+        codecompanion = { "codecompanion" }, -- Enable codecompanion in chat buffers
       },
 
       -- Provider configuration with score offsets for prioritization
@@ -229,7 +228,7 @@ return { -- Autocompletion
         yank = {
           module = "blink-yanky",
           name = "Yank",
-          score_offset = 55,
+          score_offset = 65,
           opts = {
             minLength = 3, -- Minimum yank length to show in completion
             onlyCurrentFiletype = false, -- Show yanks from all filetypes
@@ -293,7 +292,7 @@ return { -- Autocompletion
         words = {
           module = "blink-cmp-words.thesaurus",
           name = "Words",
-          score_offset = 45,
+          score_offset = 20,
           opts = {
             definition_pointers = { "!", "&", "^" }, -- Antonyms, similar-to, also-see
             similarity_pointers = { "&", "^" }, -- Similar-to, also-see
@@ -350,7 +349,7 @@ return { -- Autocompletion
         --   },
         -- },
 
-	codecompanion = {
+        codecompanion = {
           name = "codecompanion",
           module = "codecompanion.providers.completion.blink",
           enabled = true,
