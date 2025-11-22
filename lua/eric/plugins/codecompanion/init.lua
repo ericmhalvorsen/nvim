@@ -169,5 +169,17 @@ You carefully provide accurate, factual, thoughtful answers, and are a genius at
         use_default_prompt_library = true,
       },
     }
+
+    -- Initialize autosave for CodeCompanion buffers
+    -- Saves chat history to ~/.local/share/nvim/codecompanion/
+    require("eric.plugins.codecompanion.autosave").setup {
+      enabled = true,
+      triggers = {
+        "BufLeave", -- When leaving buffer
+        "FocusLost", -- When Neovim loses focus
+      },
+      save_dir = "~/.local/share/nvim/codecompanion/",
+      notify_on_save = false, -- Set to true to see save notifications
+    }
   end,
 }

@@ -1,5 +1,10 @@
 -- CodeCompanion Adapters Configuration
 -- Provides intelligent adapter selection based on directory patterns
+--
+-- DYNAMIC DIRECTORY-BASED AUTH:
+-- Auth method is determined IN REAL-TIME based on current working directory.
+-- When you :cd to a new directory, the next CodeCompanion chat will automatically
+-- use the appropriate auth method. No restart required!
 
 local M = {}
 
@@ -15,6 +20,12 @@ M.config = {
     -- Example: { pattern = "client%-.*", adapter_type = "api_key" }
     -- Example: { pattern = "personal/.*", adapter_type = "oauth" }
   },
+
+  -- Show notification when auth method changes? (true/false/"verbose")
+  -- true = show simple notification
+  -- "verbose" = show detailed info including directory
+  -- false = silent
+  notify_auth_switch = "verbose",
 }
 
 -- Check if current working directory matches a pattern
@@ -23,29 +34,63 @@ local function matches_pattern(pattern)
   return string.match(cwd, pattern) ~= nil
 end
 
--- Determine which authentication method to use
+-- Get current working directory (for notifications)
+local function get_cwd()
+  return vim.fn.getcwd()
+end
+
+-- Determine which authentication method to use (called dynamically each time)
 local function should_use_api_key()
   -- Check main pattern
   if matches_pattern(M.config.api_key_pattern) then
-    return true
+    return true, M.config.api_key_pattern
   end
 
   -- Check custom patterns
   for _, config in ipairs(M.config.patterns) do
     if config.adapter_type == "api_key" and matches_pattern(config.pattern) then
-      return true
+      return true, config.pattern
     end
   end
 
-  return false
+  return false, nil
+end
+
+-- Notify user about auth method (if enabled)
+local function notify_auth_method(using_api_key, matched_pattern)
+  if M.config.notify_auth_switch == false then
+    return
+  end
+
+  local cwd = get_cwd()
+  local method = using_api_key and "API Key (file)" or "Default Auth"
+
+  if M.config.notify_auth_switch == "verbose" then
+    local msg = string.format(
+      "Auth: %s\nDir: %s%s",
+      method,
+      cwd,
+      matched_pattern and string.format("\nPattern: %s", matched_pattern) or ""
+    )
+    vim.notify(msg, vim.log.levels.INFO, { title = "CodeCompanion" })
+  elseif M.config.notify_auth_switch == true then
+    vim.notify("Using: " .. method, vim.log.levels.INFO, { title = "CodeCompanion" })
+  end
 end
 
 -- Return all adapter configurations
 return {
   http = {
-    -- Anthropic/Claude adapter with intelligent auth selection
+    -- Anthropic/Claude adapter with DYNAMIC intelligent auth selection
+    -- Auth method determined in real-time based on current working directory
+    -- Changes automatically when you :cd to different directories
     anthropic = function()
-      local api_key_config = should_use_api_key() and "cmd:~/.claude/anthropic_key.sh" or nil
+      -- Dynamically check current directory for auth method
+      local using_api_key, matched_pattern = should_use_api_key()
+      local api_key_config = using_api_key and "cmd:~/.claude/anthropic_key.sh" or nil
+
+      -- Notify user about auth method (if enabled in config)
+      notify_auth_method(using_api_key, matched_pattern)
 
       return require("codecompanion.adapters").extend("anthropic", {
         env = {

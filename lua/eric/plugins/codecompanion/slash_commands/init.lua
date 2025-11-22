@@ -29,4 +29,8 @@ return {
       provider = "default",
     },
   },
+
+  -- Custom slash commands
+  ["diagnostics"] = require "eric.plugins.codecompanion.slash_commands.diagnostics",
+  ["git_files"] = require "eric.plugins.codecompanion.slash_commands.git_files",
 }
