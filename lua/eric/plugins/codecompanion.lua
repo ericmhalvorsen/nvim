@@ -32,7 +32,7 @@ return {
             return require("codecompanion.adapters").extend("anthropic", {
               env = {
                 -- Read API key from your existing shell script
-                api_key = "cmd:~/.claude/anthropic_key.sh",
+                -- api_key = "cmd:~/.claude/anthropic_key.sh",
               },
               schema = {
                 model = {
