@@ -34,7 +34,6 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 
-local keymaps = require "eric.keymaps"
 
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
@@ -70,4 +69,3 @@ vim.api.nvim_create_autocmd("FileType", {
   end,
 })
 
-keymaps.setup()

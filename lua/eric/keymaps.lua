@@ -254,11 +254,118 @@ function M.add_ecolog_keymaps()
   M.register_keymap("environment", "n", "<leader>et", "<cmd>EcologShelterToggle<cr>", { desc = "Toggle env value masking" })
 end
 
+function M.add_codecompanion_keymaps()
+  M.register_keymap("ai", { "n", "v" }, "<C-a>", "<cmd>CodeCompanionActions<cr>", { desc = "CodeCompanion Actions" })
+  M.register_keymap("ai", { "n", "v" }, "<LocalLeader>a", "<cmd>CodeCompanionChat Toggle<cr>", { desc = "Toggle CodeCompanion Chat" })
+  M.register_keymap("ai", "v", "<LocalLeader>aa", "<cmd>CodeCompanionChat Add<cr>", { desc = "Add selection to chat" })
+  M.register_keymap("ai", { "n", "v" }, "<LocalLeader>ai", "<cmd>CodeCompanion<cr>", { desc = "Inline AI assistant" })
+  M.register_keymap("ai", "n", "<LocalLeader>ac", "<cmd>CodeCompanionChat<cr>", { desc = "New CodeCompanion chat" })
+
+  vim.cmd [[cab cc CodeCompanion]]
+end
+
+function M.get_codecompanion_chat_keys()
+  return {
+    send = {
+      modes = { n = "<C-s>", i = "<C-s>" },
+      index = 1,
+      callback = "keymaps.send",
+      description = "Send message",
+    },
+    close = {
+      modes = { n = "q", i = "<C-c>" },
+      index = 2,
+      callback = "keymaps.close",
+      description = "Close chat",
+    },
+    stop = {
+      modes = { n = "<C-c>" },
+      index = 3,
+      callback = "keymaps.stop",
+      description = "Stop request",
+    },
+    regenerate = {
+      modes = { n = "gr" },
+      index = 4,
+      callback = "keymaps.regenerate",
+      description = "Regenerate response",
+    },
+    codeblock = {
+      modes = { n = "gc" },
+      index = 5,
+      callback = "keymaps.codeblock",
+      description = "Insert codeblock",
+    },
+    yank_code = {
+      modes = { n = "gy" },
+      index = 6,
+      callback = "keymaps.yank_code",
+      description = "Yank code",
+    },
+    next_chat = {
+      modes = { n = "}" },
+      index = 7,
+      callback = "keymaps.next_chat",
+      description = "Next chat",
+    },
+    previous_chat = {
+      modes = { n = "{" },
+      index = 8,
+      callback = "keymaps.previous_chat",
+      description = "Previous chat",
+    },
+    next_header = {
+      modes = { n = "]]" },
+      index = 9,
+      callback = "keymaps.next_header",
+      description = "Next header",
+    },
+    previous_header = {
+      modes = { n = "[[" },
+      index = 10,
+      callback = "keymaps.previous_header",
+      description = "Previous header",
+    },
+  }
+end
+
+function M.get_codecompanion_inline_keys()
+  return {
+    accept_change = {
+      modes = { n = "ga" },
+      index = 1,
+      callback = "keymaps.accept_change",
+      description = "Accept change",
+    },
+    reject_change = {
+      modes = { n = "gr" },
+      index = 2,
+      callback = "keymaps.reject_change",
+      description = "Reject change",
+      opts = { nowait = true },
+    },
+  }
+end
+
+function M.add_ufo_keymaps()
+  M.register_keymap("folding", "n", "zR", function()
+    require("ufo").openAllFolds()
+  end, { desc = "Open all folds" })
+  M.register_keymap("folding", "n", "zM", function()
+    require("ufo").closeAllFolds()
+  end, { desc = "Close all folds" })
+end
+
 function M.setup()
+  M.add_telescope_keymaps()
   M.add_core_keymaps()
-  M.add_database_keymaps()
-  M.add_yank_keymaps()
-  M.add_ecolog_keymaps()
+  M.add_floaterm_keymaps()
+  M.add_commander_keymaps()
+  M.add_codecompanion_keymaps()
+  M.add_ufo_keymaps()
+
+  local keymaps = require "eric.keymaps"
+  require("commander").add(keymaps.registered_keymaps, {})
 end
 
 return M
