@@ -1,10 +1,15 @@
-# Eric's NVIM setup
+# LazyVim config
+
+https://www.lazyvim.org/installation
 
 I use this stuff, you don't have to. If you want to though do something like this:
 
 ```bash
 # install stuff
 brew install neovim
+
+# backup
+mv ~/.config/nvim{,.bak}
 
 # clone things
 git clone git@github.com:ericmhalvorsen/nvim.git ~/.config/nvim
@@ -17,9 +22,4 @@ echo 'alias vi=nvim' >> ~/.zshrc
 vi
 
 ``` 
-
-Lazy should initialize and it'll look like the gif below. I'm probably not
-going to update the gif so if it's really out of date my bad.
-
-# TODO gif
 

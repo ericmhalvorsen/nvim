@@ -49,6 +49,9 @@ return { -- Fuzzy Finder (files, lsp, etc)
           require("telescope.themes").get_dropdown(),
         },
       },
+      defaults = {
+        path_display = { "filename_first" },
+      },
     }
 
     pcall(require("telescope").load_extension, "fzf")
