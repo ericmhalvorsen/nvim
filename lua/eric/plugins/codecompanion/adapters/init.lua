@@ -21,10 +21,6 @@ M.config = {
     -- Example: { pattern = "personal/.*", adapter_type = "oauth" }
   },
 
-  -- Show notification when auth method changes? (true/false/"verbose")
-  -- true = show simple notification
-  -- "verbose" = show detailed info including directory
-  -- false = silent
   notify_auth_switch = "verbose",
 }
 
@@ -66,12 +62,7 @@ local function notify_auth_method(using_api_key, matched_pattern)
   local method = using_api_key and "API Key (file)" or "Default Auth"
 
   if M.config.notify_auth_switch == "verbose" then
-    local msg = string.format(
-      "Auth: %s\nDir: %s%s",
-      method,
-      cwd,
-      matched_pattern and string.format("\nPattern: %s", matched_pattern) or ""
-    )
+    local msg = string.format("Auth: %s\nDir: %s%s", method, cwd, matched_pattern and string.format("\nPattern: %s", matched_pattern) or "")
     vim.notify(msg, vim.log.levels.INFO, { title = "CodeCompanion" })
   elseif M.config.notify_auth_switch == true then
     vim.notify("Using: " .. method, vim.log.levels.INFO, { title = "CodeCompanion" })
@@ -81,20 +72,14 @@ end
 -- Return all adapter configurations
 return {
   http = {
-    -- Anthropic/Claude adapter with DYNAMIC intelligent auth selection
-    -- Auth method determined in real-time based on current working directory
-    -- Changes automatically when you :cd to different directories
     anthropic = function()
-      -- Dynamically check current directory for auth method
       local using_api_key, matched_pattern = should_use_api_key()
-      local api_key_config = using_api_key and "cmd:~/.claude/anthropic_key.sh" or nil
+      local api_key_config = using_api_key and "cmd:~/.claude/anthropic_key.sh" or "cmd:~/.claude/erickey.sh"
 
-      -- Notify user about auth method (if enabled in config)
       notify_auth_method(using_api_key, matched_pattern)
 
       return require("codecompanion.adapters").extend("anthropic", {
         env = {
-          -- Use API key from file if directory matches pattern, otherwise use default auth
           api_key = api_key_config,
         },
         schema = {
@@ -110,9 +95,6 @@ return {
       })
     end,
 
-    -- GitHub Models adapter (free tier with rate limits)
-    -- Requires: gh CLI installed and logged in
-    -- Uses GitHub token with models:read permission
     github = function()
       return require("codecompanion.adapters").extend("openai_compatible", {
         name = "github_models",
@@ -140,7 +122,6 @@ return {
       })
     end,
 
-    -- OpenRouter adapter (access to many models)
     openrouter = function()
       local api_key = os.getenv "OPENROUTER_API_KEY"
       if not api_key then

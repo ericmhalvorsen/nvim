@@ -162,7 +162,7 @@ return { -- Autocompletion
 
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "buffer", "lazydev", "yank", "calc", "emoji", "nerdfont", "dadbod", "words" },
+      default = { "lsp", "path", "snippets", "buffer", "lazydev", "yank", "calc", "emoji", "nerdfont", "dadbod" },
 
       -- Per-filetype sources
       per_filetype = {
