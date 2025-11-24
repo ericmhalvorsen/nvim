@@ -1,8 +1,8 @@
 local plugins = {}
 
 local skip_list = {
-  "avante.lua",     -- Disabled
-  "minuet.lua",     -- Disabled
+  "avante.lua", -- Disabled
+  "minuet.lua", -- Disabled
 }
 
 local plugins_dir = vim.fn.stdpath "config" .. "/lua/eric/plugins"
@@ -32,10 +32,7 @@ for _, filepath in ipairs(plugin_files) do
         table.insert(plugins, plugin)
       end
     else
-      vim.notify(
-        string.format("Failed to load plugin: %s\nError: %s", module_name, plugin),
-        vim.log.levels.WARN
-      )
+      vim.notify(string.format("Failed to load plugin: %s\nError: %s", module_name, plugin), vim.log.levels.WARN)
     end
   end
 end
