@@ -2,7 +2,7 @@
 
 https://www.lazyvim.org/installation
 
-I use this stuff, you don't have to. If you want to though do something like this:
+I use this stuff, you don't have to. If you want:
 
 ```bash
 # install stuff
