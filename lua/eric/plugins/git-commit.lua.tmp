@@ -2,7 +2,7 @@
 -- Install: npm install -g aicommit or brew install aicommit
 -- Usage: :GitAICommit to generate commit message from staged changes
 return {
-  "gitsang/aicommit", -- Dummy plugin name for lazy.nvim tracking
+  "ericmhalvorsen/aicommit", -- Dummy plugin name for lazy.nvim tracking
   dev = true, -- Mark as development plugin (not from GitHub)
   config = function()
     -- Configuration storage
@@ -24,10 +24,10 @@ return {
 
     local function run_in_terminal(cmd, title)
       local term_cmd = "terminal " .. cmd
-      vim.cmd("botright split")
-      vim.cmd("resize 15")
+      vim.cmd "botright split"
+      vim.cmd "resize 15"
       vim.cmd(term_cmd)
-      vim.cmd("setlocal nonumber norelativenumber")
+      vim.cmd "setlocal nonumber norelativenumber"
       if title then
         vim.cmd("file " .. title)
       end
@@ -35,11 +35,11 @@ return {
 
     local function list_adapters()
       if vim.tbl_isempty(config.adapters) then
-        print("[GitAICommit] No adapters configured")
+        print "[GitAICommit] No adapters configured"
         return
       end
 
-      print("[GitAICommit] Configured adapters:")
+      print "[GitAICommit] Configured adapters:"
       for name, adapter in pairs(config.adapters) do
         local status = (name == config.adapter) and "* " or "  "
         print(status .. name .. " - " .. adapter.model)
@@ -65,7 +65,7 @@ return {
     end
 
     local function ai_commit(opts)
-      vim.cmd("w")
+      vim.cmd "w"
 
       opts = opts or {}
       local adapter_name = opts.adapter
@@ -74,7 +74,7 @@ return {
       if not adapter then
         print("[GitAICommit Error] " .. err)
         print("Available adapters: " .. table.concat(vim.tbl_keys(config.adapters), ", "))
-        print("Use :GitAICommitConfig to configure adapters")
+        print "Use :GitAICommitConfig to configure adapters"
         return
       end
 
