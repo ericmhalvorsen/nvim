@@ -351,12 +351,63 @@ function M.add_ufo_keymaps()
   end, { desc = "Close all folds" })
 end
 
+function M.add_opencode_keymaps()
+  local opencode = require "opencode"
+
+  -- Main interface
+  M.register_keymap("ai", { "n", "v" }, "<leader>oca", opencode.ask, { desc = "OpenCode: Ask with prompt" })
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocs", opencode.select, { desc = "OpenCode: Select action" })
+
+  -- Built-in prompts with context
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocd", function()
+    opencode.prompt "diagnostics"
+  end, { desc = "OpenCode: Fix diagnostics" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oce", function()
+    opencode.prompt "explain"
+  end, { desc = "OpenCode: Explain code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocf", function()
+    opencode.prompt "fix"
+  end, { desc = "OpenCode: Fix code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocr", function()
+    opencode.prompt "review"
+  end, { desc = "OpenCode: Review code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oct", function()
+    opencode.prompt "test"
+  end, { desc = "OpenCode: Generate tests" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oco", function()
+    opencode.prompt "optimize"
+  end, { desc = "OpenCode: Optimize code" })
+
+  M.register_keymap("ai", "n", "<leader>ocD", function()
+    opencode.prompt "diff"
+  end, { desc = "OpenCode: Review diff" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocm", function()
+    opencode.prompt "document"
+  end, { desc = "OpenCode: Document code" })
+
+  -- Session management
+  M.register_keymap("ai", "n", "<leader>ocn", function()
+    opencode.command "new"
+  end, { desc = "OpenCode: New session" })
+
+  M.register_keymap("ai", "n", "<leader>ocl", function()
+    opencode.command "list"
+  end, { desc = "OpenCode: List sessions" })
+end
+
 function M.setup()
   M.add_telescope_keymaps()
   M.add_core_keymaps()
   M.add_floaterm_keymaps()
   M.add_commander_keymaps()
   M.add_codecompanion_keymaps()
+  M.add_opencode_keymaps()
   M.add_ufo_keymaps()
 
   local keymaps = require "eric.keymaps"
