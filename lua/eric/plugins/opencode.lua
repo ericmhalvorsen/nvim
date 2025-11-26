@@ -126,10 +126,123 @@ Analyze the code for:
 5. Edge cases not handled
 
 Suggest debugging strategies and potential fixes.]],
+
+        -- Project context review
+        ["project-review"] = [[Review the current project structure and recent changes:
+
+Project Files:
+@tree
+
+Recent Files:
+@recent
+
+Git Status:
+@git
+
+Provide analysis of project organization and suggest improvements.]],
+
+        -- Error-focused fix
+        ["fix-errors"] = [[Fix the errors in @this:
+
+Errors:
+@errors
+
+Provide corrected code that resolves all errors.]],
       },
 
-      -- Note: Context placeholders (@this, @buffer, @diagnostics, @diff, @quickfix,
-      -- @visible, @buffers, @grapple) are built-in and automatically available in all prompts
+      -- Custom context placeholders
+      -- Built-in: @this, @buffer, @buffers, @visible, @diagnostics, @quickfix, @diff, @grapple
+      contexts = {
+        -- Clipboard content
+        ["@clipboard"] = function()
+          return vim.fn.getreg "+"
+        end,
+
+        -- Only errors (no warnings) from diagnostics
+        ["@errors"] = function()
+          local diagnostics = vim.diagnostic.get(0, { severity = vim.diagnostic.severity.ERROR })
+          if #diagnostics == 0 then
+            return "No errors found"
+          end
+
+          local lines = {}
+          for _, diag in ipairs(diagnostics) do
+            table.insert(lines, string.format("Line %d: %s", diag.lnum + 1, diag.message))
+          end
+          return table.concat(lines, "\n")
+        end,
+
+        -- Recently edited files
+        ["@recent"] = function()
+          local recent_files = vim.v.oldfiles or {}
+          local cwd = vim.fn.getcwd()
+          local result = {}
+
+          -- Get up to 10 recent files from current project
+          for _, file in ipairs(recent_files) do
+            if vim.startswith(file, cwd) and #result < 10 then
+              table.insert(result, file:sub(#cwd + 2)) -- Remove cwd prefix
+            end
+          end
+
+          return #result > 0 and table.concat(result, "\n") or "No recent files"
+        end,
+
+        -- Git status output
+        ["@git"] = function()
+          local handle = io.popen "git status --short 2>&1"
+          if not handle then
+            return "Git not available"
+          end
+          local result = handle:read "*a"
+          handle:close()
+          return result ~= "" and result or "No git changes"
+        end,
+
+        -- Current function/method context (using treesitter)
+        ["@function"] = function()
+          local ok, ts_utils = pcall(require, "nvim-treesitter.ts_utils")
+          if not ok then
+            return "Treesitter not available"
+          end
+
+          local node = ts_utils.get_node_at_cursor()
+          if not node then
+            return "Not inside a function"
+          end
+
+          -- Walk up the tree to find function node
+          while node do
+            local node_type = node:type()
+            if
+              node_type == "function_declaration"
+              or node_type == "function_definition"
+              or node_type == "method_declaration"
+              or node_type == "method_definition"
+              or node_type == "arrow_function"
+              or node_type == "function"
+            then
+              local start_row, start_col, end_row, end_col = node:range()
+              local lines = vim.api.nvim_buf_get_lines(0, start_row, end_row + 1, false)
+              return table.concat(lines, "\n")
+            end
+            node = node:parent()
+          end
+
+          return "Not inside a function"
+        end,
+
+        -- Current project structure (simple tree)
+        ["@tree"] = function()
+          local handle = io.popen "find . -type f -not -path '*/.*' -not -path '*/node_modules/*' | head -n 50"
+          if not handle then
+            return "Unable to generate tree"
+          end
+          local result = handle:read "*a"
+          handle:close()
+          return result ~= "" and result or "Empty project"
+        end,
+      },
     }
 
     -- Set up autocmds for opencode events

@@ -432,6 +432,14 @@ function M.add_opencode_keymaps()
     opencode.prompt "debug"
   end, { desc = "OpenCode: Debug help" })
 
+  M.register_keymap("ai", "n", "<leader>ocP", function()
+    opencode.prompt "project-review"
+  end, { desc = "OpenCode: Project review" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocX", function()
+    opencode.prompt "fix-errors"
+  end, { desc = "OpenCode: Fix errors only" })
+
   -- Session management
   M.register_keymap("ai", "n", "<leader>ocn", function()
     opencode.command "new"
