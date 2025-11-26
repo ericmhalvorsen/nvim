@@ -355,7 +355,7 @@ function M.add_opencode_keymaps()
   local opencode = require "opencode"
 
   -- Main interface
-  M.register_keymap("ai", { "n", "v" }, "<leader>oca", opencode.ask, { desc = "OpenCode: Ask with prompt" })
+  M.register_keymap("ai", { "n", "v" }, "<leader>oci", opencode.ask, { desc = "OpenCode: Ask with prompt" })
   M.register_keymap("ai", { "n", "v" }, "<leader>ocs", opencode.select, { desc = "OpenCode: Select action" })
 
   -- Built-in prompts with context
@@ -390,6 +390,47 @@ function M.add_opencode_keymaps()
   M.register_keymap("ai", { "n", "v" }, "<leader>ocm", function()
     opencode.prompt "document"
   end, { desc = "OpenCode: Document code" })
+
+  -- Custom prompts
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocR", function()
+    opencode.prompt "review-detailed"
+  end, { desc = "OpenCode: Detailed code review" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oca", function()
+    opencode.prompt "analyze"
+  end, { desc = "OpenCode: Analyze with diagnostics" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocE", function()
+    opencode.prompt "explain-detailed"
+  end, { desc = "OpenCode: Detailed explanation" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocF", function()
+    opencode.prompt "fix-diagnostics"
+  end, { desc = "OpenCode: Fix with diagnostics" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocu", function()
+    opencode.prompt "unit-tests"
+  end, { desc = "OpenCode: Generate unit tests" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocS", function()
+    opencode.prompt "security"
+  end, { desc = "OpenCode: Security review" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocp", function()
+    opencode.prompt "performance"
+  end, { desc = "OpenCode: Performance analysis" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocx", function()
+    opencode.prompt "refactor"
+  end, { desc = "OpenCode: Refactor code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocq", function()
+    opencode.prompt "quickfix"
+  end, { desc = "OpenCode: Quick fix" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocb", function()
+    opencode.prompt "debug"
+  end, { desc = "OpenCode: Debug help" })
 
   -- Session management
   M.register_keymap("ai", "n", "<leader>ocn", function()
