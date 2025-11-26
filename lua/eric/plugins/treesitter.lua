@@ -17,6 +17,7 @@ return { -- Highlight, edit, and navigate code
       "elixir",
       "markdown",
       "markdown_inline",
+      "svelte",
       "query",
       "vim",
       "vimdoc",

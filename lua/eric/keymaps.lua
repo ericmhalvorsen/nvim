@@ -31,20 +31,15 @@ function M.add_core_keymaps()
   M.register_keymap("windows", "n", "<C-l>", "<C-w><C-l>", { desc = "Move focus to right window" })
   M.register_keymap("windows", "n", "<C-j>", "<C-w><C-j>", { desc = "Move focus to lower window" })
   M.register_keymap("windows", "n", "<C-k>", "<C-w><C-k>", { desc = "Move focus to upper window" })
-
-  M.register_keymap(
-    "telescope",
-    "n",
-    "<leader>sw",
-    "<cmd>lua require('telescope.builtin').grep_string({search = vim.fn.expand(\"<cword>\")})<cr>",
-    { desc = "Search for word under the cursor" }
-  )
 end
 
 function M.add_telescope_keymaps()
   local builtin = require "telescope.builtin"
+  local themes = require "telescope.themes"
+  local colorscheme_persist = require "colorscheme-persist"
 
-  M.register_keymap("telescope", "n", "<leader>sh", builtin.help_tags, { desc = "Search Help" })
+  M.register_keymap("telescope", "n", "<leader>shi", builtin.search_history, { desc = "Search History" })
+  M.register_keymap("telescope", "n", "<leader>she", builtin.help_tags, { desc = "Search Help" })
   M.register_keymap("telescope", "n", "<leader>sk", builtin.keymaps, { desc = "Search Keymaps" })
   M.register_keymap("telescope", "n", "<leader>sp", builtin.find_files, { desc = "Search Files" })
   M.register_keymap("telescope", "n", "<leader>ss", builtin.builtin, { desc = "Search Select Telescope" })
@@ -52,10 +47,11 @@ function M.add_telescope_keymaps()
   M.register_keymap("telescope", "n", "<leader>sf", builtin.live_grep, { desc = "Search by Grep" })
   M.register_keymap("telescope", "n", "<leader>sd", builtin.diagnostics, { desc = "Search Diagnostics" })
   M.register_keymap("telescope", "n", "<leader>sr", builtin.resume, { desc = "Search Resume" })
+  M.register_keymap("telescope", "n", "<leader>sc", colorscheme_persist.picker, { desc = "Select colorscheme" })
   M.register_keymap("telescope", "n", "<leader>s.", builtin.oldfiles, { desc = "Search Recent Files" })
   M.register_keymap("telescope", "n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
   M.register_keymap("telescope", "n", "<leader>/", function()
-    builtin.current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
+    builtin.current_buffer_fuzzy_find(themes.get_dropdown {
       winblend = 10,
       previewer = false,
     })
@@ -238,8 +234,7 @@ end
 
 function M.add_yank_keymaps()
   -- Yank history picker (defined in yanky.lua plugin keys, registered here for commander)
-  M.register_keymap("yank", "n", "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
-  M.register_keymap("yank", "x", "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
+  M.register_keymap("yank", { "n", "x" }, "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
 
   -- Note: The enhanced paste operations (p, P, gp, gP) and cycle keymaps (<c-p>, <c-n>)
   -- are defined in yanky.lua plugin keys as they need to be available immediately on plugin load.

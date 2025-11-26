@@ -17,6 +17,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
       end,
     },
     { "nvim-telescope/telescope-ui-select.nvim" },
+    { "nvim-telescope/telescope-file-browser.nvim" },
 
     -- Useful for getting pretty icons, but requires a Nerd Font.
     { "nvim-tree/nvim-web-devicons", enabled = vim.g.have_nerd_font },
@@ -43,6 +44,35 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     -- [[ Configure Telescope ]]
     -- See `:help telescope` and `:help telescope.setup()`
+
+    local ts_select_dir_for_grep = function()
+      local action_state = require "telescope.actions.state"
+      local fb = require("telescope").extensions.file_browser
+      local live_grep = require("telescope.builtin").live_grep
+      local current_line = action_state.get_current_line()
+
+      fb.file_browser {
+        files = false,
+        depth = false,
+        attach_mappings = function(prompt_bufnr)
+          require("telescope.actions").select_default:replace(function()
+            local entry_path = action_state.get_selected_entry().Path
+            local dir = entry_path:is_dir() and entry_path or entry_path:parent()
+            local relative = dir:make_relative(vim.fn.getcwd())
+            local absolute = dir:absolute()
+
+            live_grep {
+              results_title = relative .. "/",
+              cwd = absolute,
+              default_text = current_line,
+            }
+          end)
+
+          return true
+        end,
+      }
+    end
+
     require("telescope").setup {
       extensions = {
         ["ui-select"] = {
@@ -51,6 +81,16 @@ return { -- Fuzzy Finder (files, lsp, etc)
       },
       defaults = {
         path_display = { "filename_first" },
+        mappings = {
+          i = {
+            ["<C-f>"] = require("telescope.actions").to_fuzzy_refine,
+            ["<C-d>"] = ts_select_dir_for_grep,
+          },
+          n = {
+            ["<C-f>"] = require("telescope.actions").to_fuzzy_refine,
+            ["<C-d>"] = ts_select_dir_for_grep,
+          },
+        },
       },
     }
 

@@ -96,6 +96,16 @@ return {
           },
         },
       },
+      svelte = function(_, opts)
+        require("lazy").extend(opts.servers.vtsls, "settings.vtsls.tsserver.globalPlugins", {
+          {
+            name = "typescript-svelte-plugin",
+            location = require("lazy").get_pkg_path("svelte-language-server", "/node_modules/typescript-svelte-plugin"),
+            enableForWorkspaceTypeScriptVersions = true,
+          },
+        })
+      end,
+
       gopls = {},
       clangd = {},
       pyright = {},

@@ -34,7 +34,6 @@ vim.o.cursorline = true
 vim.o.scrolloff = 10
 vim.o.confirm = true
 
-
 vim.api.nvim_create_autocmd("TextYankPost", {
   desc = "Highlight when yanking (copying) text",
   group = vim.api.nvim_create_augroup("highlight-yank", { clear = true }),
@@ -47,7 +46,7 @@ vim.api.nvim_create_autocmd("FileType", {
   pattern = "qf",
   desc = "Attach keymaps for quickfix list",
   callback = function()
-    keymaps.register_keymap("quickfix", "n", "d", function()
+    require("eric.keymaps").register_keymap("quickfix", "n", "d", function()
       local qf_list = vim.fn.getqflist()
 
       local current_line_number = vim.fn.line "."
@@ -68,4 +67,3 @@ vim.api.nvim_create_autocmd("FileType", {
     })
   end,
 })
-
