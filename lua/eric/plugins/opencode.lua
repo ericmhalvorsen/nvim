@@ -128,18 +128,8 @@ Analyze the code for:
 Suggest debugging strategies and potential fixes.]],
       },
 
-      -- Context placeholder configuration
-      -- Available placeholders that can be used in prompts:
-      context = {
-        -- @this - Visual selection or cursor position
-        -- @buffer - Current buffer content
-        -- @buffers - All open buffers
-        -- @visible - Visible text on screen
-        -- @diagnostics - Current buffer diagnostics
-        -- @quickfix - Quickfix list items
-        -- @diff - Git diff output
-        -- @grapple - grapple.nvim tags (if installed)
-      },
+      -- Note: Context placeholders (@this, @buffer, @diagnostics, @diff, @quickfix,
+      -- @visible, @buffers, @grapple) are built-in and automatically available in all prompts
     }
 
     -- Set up autocmds for opencode events
