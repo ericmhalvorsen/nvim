@@ -105,6 +105,7 @@ return {
           },
         })
       end,
+      dockerls = {},
 
       gopls = {},
       clangd = {},
