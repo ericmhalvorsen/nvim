@@ -351,12 +351,112 @@ function M.add_ufo_keymaps()
   end, { desc = "Close all folds" })
 end
 
+function M.add_opencode_keymaps()
+  local opencode = require "opencode"
+
+  -- Main interface
+  M.register_keymap("ai", { "n", "v" }, "<leader>oci", opencode.ask, { desc = "OpenCode: Ask with prompt" })
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocs", opencode.select, { desc = "OpenCode: Select action" })
+
+  -- Built-in prompts with context
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocd", function()
+    opencode.prompt "diagnostics"
+  end, { desc = "OpenCode: Fix diagnostics" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oce", function()
+    opencode.prompt "explain"
+  end, { desc = "OpenCode: Explain code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocf", function()
+    opencode.prompt "fix"
+  end, { desc = "OpenCode: Fix code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocr", function()
+    opencode.prompt "review"
+  end, { desc = "OpenCode: Review code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oct", function()
+    opencode.prompt "test"
+  end, { desc = "OpenCode: Generate tests" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oco", function()
+    opencode.prompt "optimize"
+  end, { desc = "OpenCode: Optimize code" })
+
+  M.register_keymap("ai", "n", "<leader>ocD", function()
+    opencode.prompt "diff"
+  end, { desc = "OpenCode: Review diff" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocm", function()
+    opencode.prompt "document"
+  end, { desc = "OpenCode: Document code" })
+
+  -- Custom prompts
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocR", function()
+    opencode.prompt "review-detailed"
+  end, { desc = "OpenCode: Detailed code review" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>oca", function()
+    opencode.prompt "analyze"
+  end, { desc = "OpenCode: Analyze with diagnostics" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocE", function()
+    opencode.prompt "explain-detailed"
+  end, { desc = "OpenCode: Detailed explanation" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocF", function()
+    opencode.prompt "fix-diagnostics"
+  end, { desc = "OpenCode: Fix with diagnostics" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocu", function()
+    opencode.prompt "unit-tests"
+  end, { desc = "OpenCode: Generate unit tests" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocS", function()
+    opencode.prompt "security"
+  end, { desc = "OpenCode: Security review" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocp", function()
+    opencode.prompt "performance"
+  end, { desc = "OpenCode: Performance analysis" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocx", function()
+    opencode.prompt "refactor"
+  end, { desc = "OpenCode: Refactor code" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocq", function()
+    opencode.prompt "quickfix"
+  end, { desc = "OpenCode: Quick fix" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocb", function()
+    opencode.prompt "debug"
+  end, { desc = "OpenCode: Debug help" })
+
+  M.register_keymap("ai", "n", "<leader>ocP", function()
+    opencode.prompt "project-review"
+  end, { desc = "OpenCode: Project review" })
+
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocX", function()
+    opencode.prompt "fix-errors"
+  end, { desc = "OpenCode: Fix errors only" })
+
+  -- Session management
+  M.register_keymap("ai", "n", "<leader>ocn", function()
+    opencode.command "new"
+  end, { desc = "OpenCode: New session" })
+
+  M.register_keymap("ai", "n", "<leader>ocl", function()
+    opencode.command "list"
+  end, { desc = "OpenCode: List sessions" })
+end
+
 function M.setup()
   M.add_telescope_keymaps()
   M.add_core_keymaps()
   M.add_floaterm_keymaps()
   M.add_commander_keymaps()
   M.add_codecompanion_keymaps()
+  M.add_opencode_keymaps()
   M.add_ufo_keymaps()
 
   local keymaps = require "eric.keymaps"
