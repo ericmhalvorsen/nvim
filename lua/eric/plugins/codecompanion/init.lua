@@ -111,6 +111,7 @@ You carefully provide accurate, factual, thoughtful answers, and are a genius at
 
       prompt_library = require "eric.plugins.codecompanion.prompts",
 
+      ignore_warnings = true,
       opts = {
         log_level = "INFO", -- TRACE|DEBUG|INFO|WARN|ERROR
         send_code = true,

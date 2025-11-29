@@ -103,17 +103,17 @@ return { -- Autocompletion
       -- END
 
       -- Disable completion in certain buffers to prevent slowdowns
-      enabled = function()
-        local disabled_filetypes = {
-          "TelescopePrompt",
-          "mini.files",
-          "snacks_picker",
-        }
-        local buftype = vim.bo.buftype
-        local filetype = vim.bo.filetype
-
-        return not vim.tbl_contains(disabled_filetypes, filetype) and buftype ~= "prompt"
-      end,
+      -- enabled = function()
+      --   local disabled_filetypes = {
+      --     "TelescopePrompt",
+      --     "mini.files",
+      --     "snacks_picker",
+      --   }
+      --   local buftype = vim.bo.buftype
+      --   local filetype = vim.bo.filetype
+      --
+      --   return not vim.tbl_contains(disabled_filetypes, filetype) and buftype ~= "prompt"
+      -- end,
 
       -- Customize the completion menu appearance
       menu = {
