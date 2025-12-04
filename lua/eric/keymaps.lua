@@ -67,6 +67,21 @@ function M.add_telescope_keymaps()
   end, { desc = "Search Neovim files" })
 end
 
+function M.add_spectre_keymaps()
+  vim.keymap.set("n", "<leader>S", '<cmd>lua require("spectre").toggle()<CR>', {
+    desc = "Toggle Spectre",
+  })
+  vim.keymap.set("n", "<leader>sw", '<cmd>lua require("spectre").open_visual({select_word=true})<CR>', {
+    desc = "Search current word",
+  })
+  vim.keymap.set("v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
+    desc = "Search current word",
+  })
+  vim.keymap.set("n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+    desc = "Search on current file",
+  })
+end
+
 function M.get_neotree_keys()
   return {
     { "\\", ":Neotree reveal<CR>", desc = "NeoTree reveal", silent = true },
@@ -450,6 +465,37 @@ function M.add_opencode_keymaps()
   end, { desc = "OpenCode: List sessions" })
 end
 
+function M.add_quicker_keymaps()
+  M.register_keymap("quicker", "n", "<leader>q", function()
+    require("quicker").toggle()
+  end, {
+    desc = "Toggle quickfix",
+  })
+  M.register_keymap("quicker", "n", "<leader>l", function()
+    require("quicker").toggle { loclist = true }
+  end, {
+    desc = "Toggle loclist",
+  })
+  require("quicker").setup {
+    keys = {
+      {
+        ">",
+        function()
+          require("quicker").expand { before = 2, after = 2, add_to_existing = true }
+        end,
+        desc = "Expand quickfix context",
+      },
+      {
+        "<",
+        function()
+          require("quicker").collapse()
+        end,
+        desc = "Collapse quickfix context",
+      },
+    },
+  }
+end
+
 function M.setup()
   M.add_telescope_keymaps()
   M.add_core_keymaps()
@@ -458,6 +504,7 @@ function M.setup()
   M.add_codecompanion_keymaps()
   M.add_opencode_keymaps()
   M.add_ufo_keymaps()
+  M.add_quicker_keymaps()
 
   local keymaps = require "eric.keymaps"
   require("commander").add(keymaps.registered_keymaps, {})

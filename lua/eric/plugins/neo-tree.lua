@@ -33,7 +33,7 @@ return {
         hide_gitignore = false,
       },
       window = {
-        position = "float",
+        position = "left",
         mappings = {
           ["\\"] = "close_window",
         },

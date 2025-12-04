@@ -59,16 +59,16 @@ return { -- Autocompletion
       -- <c-n>/<c-p> or <up>/<down>: Select next/previous item
       -- <c-e>: Hide menu
       -- <c-k>: Toggle signature help
-      preset = "enter",
+      preset = "super-tab",
 
       -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
       --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
       --
-      ["<tab>"] = {
-        function(cmp)
-          cmp.show {}
-        end,
-      },
+      -- ["<tab>"] = {
+      --   function(cmp)
+      --     cmp.show {}
+      --   end,
+      -- },
     },
 
     appearance = {
@@ -156,13 +156,12 @@ return { -- Autocompletion
 
       -- Trigger configuration
       trigger = {
-        prefetch_on_insert = false,
+        prefetch_on_insert = true,
       },
     },
-
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "buffer", "lazydev", "yank", "calc", "emoji", "nerdfont", "dadbod" },
+      default = { "lsp", "path", "snippets", "lazydev", "calc", "emoji", "nerdfont", "dadbod" },
 
       -- Per-filetype sources
       per_filetype = {
@@ -220,7 +219,7 @@ return { -- Autocompletion
         -- Buffer: Text from current buffer (higher priority - contextually relevant!)
         buffer = {
           name = "Buffer",
-          score_offset = 60,
+          score_offset = 30,
           max_items = 5, -- Limit buffer completions to avoid clutter
         },
 

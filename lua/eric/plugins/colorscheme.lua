@@ -22,7 +22,48 @@ return {
     -- },
     fallback = "tokyonight-storm",
   },
+  -- dark / light mode
+  { "eliseshaffer/darklight.nvim" },
   -- Themes
+  { "Everblush/nvim", name = "everblush", as = "everblush" },
+  {
+    "maxmx03/solarized.nvim",
+    lazy = false,
+    priority = 1000,
+    ---@type solarized.config
+    opts = {},
+    config = function(_, opts)
+      vim.o.termguicolors = true
+      vim.o.background = "light"
+      require("solarized").setup(opts)
+      vim.cmd.colorscheme "solarized"
+    end,
+  },
+  {
+    "everviolet/nvim",
+    name = "evergarden",
+    as = "evergarden",
+    priority = 1000, -- Colorscheme plugin is loaded first before any other plugins
+    opts = {
+      theme = {
+        variant = "fall", -- 'winter'|'fall'|'spring'|'summer'
+        accent = "green",
+      },
+      editor = {
+        transparent_background = false,
+        sign = { color = "none" },
+        float = {
+          color = "mantle",
+          solid_border = false,
+        },
+        completion = {
+          color = "surface0",
+        },
+      },
+    },
+  },
+  { "jacoborus/tender.vim", as = "tender" },
+  { "nyoom-engineering/oxocarbon.nvim" },
   {
     "folke/tokyonight.nvim",
     lazy = false,
