@@ -11,6 +11,9 @@ return {
     indent = {
       scope = { enabled = false },
     },
+    terminal = {},
+    input = {},
+    picker = {},
     dashboard = {
       enabled = true,
       sections = {

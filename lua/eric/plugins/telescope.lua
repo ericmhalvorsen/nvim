@@ -85,6 +85,8 @@ return { -- Fuzzy Finder (files, lsp, etc)
           i = {
             ["<C-f>"] = require("telescope.actions").to_fuzzy_refine,
             ["<C-d>"] = ts_select_dir_for_grep,
+            ["<C-s>"] = require("telescope.actions").select_vertical,
+            ["<C-k>"] = require("telescope.actions").select_horizontal,
           },
           n = {
             ["<C-f>"] = require("telescope.actions").to_fuzzy_refine,
