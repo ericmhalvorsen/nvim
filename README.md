@@ -18,7 +18,9 @@ git clone git@github.com:ericmhalvorsen/nvim.git ~/.config/nvim
 echo 'export EDITOR=vi' >> ~/.zshrc
 echo 'alias vi=nvim' >> ~/.zshrc
 
-# do the deed
+source ~/.zshrc
+
+# do it
 vi
 
 ``` 
