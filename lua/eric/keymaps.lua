@@ -77,9 +77,9 @@ function M.add_spectre_keymaps()
   M.register_keymap("spectre", "v", "<leader>sw", '<esc><cmd>lua require("spectre").open_visual()<CR>', {
     desc = "Search current word",
   })
-  M.register_keymap("spectre", "n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
-    desc = "Search on current file",
-  })
+  -- M.register_keymap("spectre", "n", "<leader>sp", '<cmd>lua require("spectre").open_file_search({select_word=true})<CR>', {
+  --   desc = "Search on current file",
+  -- })
 end
 
 function M.get_neotree_keys()

@@ -40,7 +40,13 @@ return { -- Autoformat
       -- You can customize some of the format options for the filetype (:help conform.format)
       rust = { "rustfmt", lsp_format = "fallback" },
       -- Conform will run the first available formatter
-      javascript = { "prettierd", "prettier", stop_after_first = true },
+      typescript = { "prettier" },
+      typescriptreact = { "prettier" },
+      javascript = { "prettier" },
+      javascriptreact = { "prettier" },
+      json = { "prettier" },
+      html = { "prettier" },
+      css = { "prettier" },
       -- Conform can also run multiple formatters sequentially
       -- python = { "isort", "black" },
       elixir = { "mix" },
