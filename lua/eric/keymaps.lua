@@ -1,6 +1,6 @@
 local M = {} -- Why M? I dunno too lazy to look it up
 
--- Global registry of all keymaps for commander integration
+-- Global registry of all keymaps
 M.registered_keymaps = {}
 
 function M.register_keymap(category, mode, lhs, rhs, opts, bufnr)
@@ -16,7 +16,7 @@ function M.register_keymap(category, mode, lhs, rhs, opts, bufnr)
     cmd = rhs,
     keys = { mode, lhs },
     cat = category,
-    set = not bufnr, -- Buffer-local keymaps have set = false for commander
+    set = not bufnr,
   }
 
   table.insert(M.registered_keymaps, keymap_entry)
@@ -231,13 +231,8 @@ function M.add_lsp_keymaps(event)
   end
 end
 
-function M.add_commander_keymaps()
-  local commander = require "commander"
-  M.register_keymap("commander", "n", "<leader>p", commander.show, { desc = "Open commander" })
-end
-
 function M.add_database_keymaps()
-  -- Main database UI toggle (defined in dadbod.lua plugin keys, registered here for commander)
+  -- Main database UI toggle
   M.register_keymap("database", "n", "<leader>D", "<cmd>DBUIToggle<CR>", { desc = "Toggle database UI" })
 
   -- Additional database commands (these are available but not bound to keys by default)
@@ -248,7 +243,7 @@ function M.add_database_keymaps()
 end
 
 function M.add_yank_keymaps()
-  -- Yank history picker (defined in yanky.lua plugin keys, registered here for commander)
+  -- Yank history picker
   M.register_keymap("yank", { "n", "x" }, "<leader>y", "<cmd>Telescope yank_history<CR>", { desc = "Open yank history" })
 
   -- Note: The enhanced paste operations (p, P, gp, gP) and cycle keymaps (<c-p>, <c-n>)
@@ -257,7 +252,7 @@ function M.add_yank_keymaps()
 end
 
 function M.add_ecolog_keymaps()
-  -- Environment variable management (defined in ecolog.lua plugin keys, registered here for commander)
+  -- Environment variable management
   M.register_keymap("environment", "n", "<leader>ge", "<cmd>EcologGoto<cr>", { desc = "Go to env file" })
   M.register_keymap("environment", "n", "<leader>ep", "<cmd>EcologPeek<cr>", { desc = "Peek env variable value" })
   M.register_keymap("environment", "n", "<leader>es", "<cmd>EcologSelect<cr>", { desc = "Select/switch env file" })
@@ -500,15 +495,11 @@ function M.setup()
   M.add_telescope_keymaps()
   M.add_core_keymaps()
   M.add_floaterm_keymaps()
-  M.add_commander_keymaps()
   M.add_codecompanion_keymaps()
   M.add_opencode_keymaps()
   M.add_ufo_keymaps()
   M.add_quicker_keymaps()
   M.add_spectre_keymaps()
-
-  local keymaps = require "eric.keymaps"
-  require("commander").add(keymaps.registered_keymaps, {})
 end
 
 return M
