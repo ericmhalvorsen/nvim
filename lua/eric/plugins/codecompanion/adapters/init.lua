@@ -59,7 +59,7 @@ local function notify_auth_method(using_api_key, matched_pattern)
   end
 
   local cwd = get_cwd()
-  local method = using_api_key and "API Key (file)" or "Default Auth"
+  local method = using_api_key and "API Key (env)" or "Default Auth"
 
   if M.config.notify_auth_switch == "verbose" then
     local msg = string.format("Auth: %s\nDir: %s%s", method, cwd, matched_pattern and string.format("\nPattern: %s", matched_pattern) or "")
@@ -74,7 +74,13 @@ return {
   http = {
     anthropic = function()
       local using_api_key, matched_pattern = should_use_api_key()
-      local api_key_config = using_api_key and "cmd:~/.claude/anthropic_key.sh" or "cmd:~/.claude/erickey.sh"
+      local api_key_env = using_api_key and "ANTHROPIC_WORK_API_KEY" or "ANTHROPIC_API_KEY"
+      local api_key_config = os.getenv(api_key_env)
+
+      if not api_key_config then
+        vim.notify(string.format("%s not set", api_key_env), vim.log.levels.WARN, { title = "CodeCompanion" })
+        return nil
+      end
 
       notify_auth_method(using_api_key, matched_pattern)
 
@@ -162,7 +168,7 @@ return {
   --   claude_code = function()
   --     return require("codecompanion.adapters").extend("claude_code", {
   --       env = {
-  --         CLAUDE_CODE_OAUTH_TOKEN = "cmd:~/.claude/oauth_token.sh",
+  --         CLAUDE_CODE_OAUTH_TOKEN = os.getenv("CLAUDE_CODE_OAUTH_TOKEN"),
   --       },
   --     })
   --   end,
