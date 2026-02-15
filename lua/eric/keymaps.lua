@@ -9,39 +9,7 @@ function M.register_keymap(category, mode, lhs, rhs, opts, bufnr)
     opts.buffer = bufnr
   end
 
-  local ok, keymaps = pcall(require, "keymaps")
-  local used_keymaps_nvim = false
-
-  if ok then
-    local mode_map = { n = "normal", v = "visual", x = "visual", i = "insert" }
-    local modes = type(mode) == "table" and mode or { mode }
-    local all_supported = true
-
-    for _, m in ipairs(modes) do
-      if not mode_map[m] then
-        all_supported = false
-        break
-      end
-    end
-
-    if all_supported then
-      for _, m in ipairs(modes) do
-        local mode_name = mode_map[m]
-        local keymap_opts = vim.deepcopy(opts)
-        local desc = keymap_opts.desc
-        keymap_opts.desc = nil
-
-        local entry = { rhs, desc, keymap_opts }
-        entry.group = category
-        keymaps[mode_name][lhs] = entry
-      end
-      used_keymaps_nvim = true
-    end
-  end
-
-  if not used_keymaps_nvim then
-    vim.keymap.set(mode, lhs, rhs, opts)
-  end
+  vim.keymap.set(mode, lhs, rhs, opts)
 
   local keymap_entry = {
     desc = opts.desc or "",
@@ -72,14 +40,7 @@ function M.add_telescope_keymaps()
 
   M.register_keymap("telescope", "n", "<leader>shi", builtin.search_history, { desc = "Search History" })
   M.register_keymap("telescope", "n", "<leader>she", builtin.help_tags, { desc = "Search Help" })
-  M.register_keymap("telescope", "n", "<leader>sk", function()
-    local extensions = require("telescope").extensions
-    if extensions.keymaps_nvim then
-      extensions.keymaps_nvim.keymaps_nvim()
-    else
-      builtin.keymaps()
-    end
-  end, { desc = "Search Keymaps" })
+  M.register_keymap("telescope", "n", "<leader>sk", builtin.keymaps, { desc = "Search Keymaps" })
   M.register_keymap("telescope", "n", "<leader>sp", builtin.find_files, { desc = "Search Files" })
   M.register_keymap("telescope", "n", "<leader>ss", builtin.builtin, { desc = "Search Select Telescope" })
   M.register_keymap("telescope", { "n", "v" }, "<leader>sW", builtin.grep_string, { desc = "Search current Word" })
