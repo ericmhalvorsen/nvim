@@ -34,41 +34,59 @@ function M.add_core_keymaps()
 end
 
 function M.add_telescope_keymaps()
-  local builtin = require "telescope.builtin"
-  local themes = require "telescope.themes"
-  local colorscheme_persist = require "colorscheme-persist"
-
-  M.register_keymap("telescope", "n", "<leader>shi", builtin.search_history, { desc = "Search History" })
-  M.register_keymap("telescope", "n", "<leader>she", builtin.help_tags, { desc = "Search Help" })
-  M.register_keymap("telescope", "n", "<leader>sk", builtin.keymaps, { desc = "Search Keymaps" })
-  M.register_keymap("telescope", "n", "<leader>sp", builtin.find_files, { desc = "Search Files" })
-  M.register_keymap("telescope", "n", "<leader>ss", builtin.builtin, { desc = "Search Select Telescope" })
-  M.register_keymap("telescope", { "n", "v" }, "<leader>sW", builtin.grep_string, { desc = "Search current Word" })
+  M.register_keymap("telescope", "n", "<leader>shi", function()
+    require("telescope.builtin").search_history()
+  end, { desc = "Search History" })
+  M.register_keymap("telescope", "n", "<leader>she", function()
+    require("telescope.builtin").help_tags()
+  end, { desc = "Search Help" })
+  M.register_keymap("telescope", "n", "<leader>sk", function()
+    require("telescope.builtin").keymaps()
+  end, { desc = "Search Keymaps" })
+  M.register_keymap("telescope", "n", "<leader>sp", function()
+    require("telescope.builtin").find_files()
+  end, { desc = "Search Files" })
+  M.register_keymap("telescope", "n", "<leader>ss", function()
+    require("telescope.builtin").builtin()
+  end, { desc = "Search Select Telescope" })
+  M.register_keymap("telescope", { "n", "v" }, "<leader>sW", function()
+    require("telescope.builtin").grep_string()
+  end, { desc = "Search current Word" })
   M.register_keymap("telescope", "n", "<leader>sf", function()
-    builtin.live_grep { additional_args = { "--fixed-strings" }, prompt_title = "Search All" }
+    require("telescope.builtin").live_grep { additional_args = { "--fixed-strings" }, prompt_title = "Search All" }
   end, { desc = "Search All " })
   M.register_keymap("telescope", "n", "<leader>sF", function()
-    builtin.live_grep { prompt_title = "Search All (Grep)" }
+    require("telescope.builtin").live_grep { prompt_title = "Search All (Grep)" }
   end, { desc = "Search All (Grep)" })
-  M.register_keymap("telescope", "n", "<leader>sd", builtin.diagnostics, { desc = "Search Diagnostics" })
-  M.register_keymap("telescope", "n", "<leader>sr", builtin.resume, { desc = "Search Resume" })
-  M.register_keymap("telescope", "n", "<leader>sc", colorscheme_persist.picker, { desc = "Select colorscheme" })
-  M.register_keymap("telescope", "n", "<leader>s.", builtin.oldfiles, { desc = "Search Recent Files" })
-  M.register_keymap("telescope", "n", "<leader><leader>", builtin.buffers, { desc = "Find existing buffers" })
+  M.register_keymap("telescope", "n", "<leader>sd", function()
+    require("telescope.builtin").diagnostics()
+  end, { desc = "Search Diagnostics" })
+  M.register_keymap("telescope", "n", "<leader>sr", function()
+    require("telescope.builtin").resume()
+  end, { desc = "Search Resume" })
+  M.register_keymap("telescope", "n", "<leader>sc", function()
+    require("colorscheme-persist").picker()
+  end, { desc = "Select colorscheme" })
+  M.register_keymap("telescope", "n", "<leader>s.", function()
+    require("telescope.builtin").oldfiles()
+  end, { desc = "Search Recent Files" })
+  M.register_keymap("telescope", "n", "<leader><leader>", function()
+    require("telescope.builtin").buffers()
+  end, { desc = "Find existing buffers" })
   M.register_keymap("telescope", "n", "<leader>/", function()
-    builtin.current_buffer_fuzzy_find(themes.get_dropdown {
+    require("telescope.builtin").current_buffer_fuzzy_find(require("telescope.themes").get_dropdown {
       winblend = 10,
       previewer = false,
     })
   end, { desc = "Fuzzily search in current buffer" })
   M.register_keymap("telescope", "n", "<leader>s/", function()
-    builtin.live_grep {
+    require("telescope.builtin").live_grep {
       grep_open_files = true,
       prompt_title = "Live Grep in Open Files",
     }
   end, { desc = "Search in Open Files" })
   M.register_keymap("telescope", "n", "<leader>sn", function()
-    builtin.find_files { cwd = vim.fn.stdpath "config" }
+    require("telescope.builtin").find_files { cwd = vim.fn.stdpath "config" }
   end, { desc = "Search Neovim files" })
 end
 
@@ -210,13 +228,25 @@ end
 function M.add_lsp_keymaps(event)
   M.register_keymap("lsp", "n", "grn", vim.lsp.buf.rename, { desc = "LSP: Rename" }, event.buf)
   M.register_keymap("lsp", { "n", "x" }, "gra", vim.lsp.buf.code_action, { desc = "LSP: Code Action" }, event.buf)
-  M.register_keymap("lsp", "n", "grr", require("telescope.builtin").lsp_references, { desc = "LSP: References" }, event.buf)
-  M.register_keymap("lsp", "n", "gri", require("telescope.builtin").lsp_implementations, { desc = "LSP: Implementation" }, event.buf)
-  M.register_keymap("lsp", "n", "grd", require("telescope.builtin").lsp_definitions, { desc = "LSP: Definition" }, event.buf)
+  M.register_keymap("lsp", "n", "grr", function()
+    require("telescope.builtin").lsp_references()
+  end, { desc = "LSP: References" }, event.buf)
+  M.register_keymap("lsp", "n", "gri", function()
+    require("telescope.builtin").lsp_implementations()
+  end, { desc = "LSP: Implementation" }, event.buf)
+  M.register_keymap("lsp", "n", "grd", function()
+    require("telescope.builtin").lsp_definitions()
+  end, { desc = "LSP: Definition" }, event.buf)
   M.register_keymap("lsp", "n", "grD", vim.lsp.buf.declaration, { desc = "LSP: Declaration" }, event.buf)
-  M.register_keymap("lsp", "n", "gO", require("telescope.builtin").lsp_document_symbols, { desc = "LSP: Document Symbols" }, event.buf)
-  M.register_keymap("lsp", "n", "gW", require("telescope.builtin").lsp_dynamic_workspace_symbols, { desc = "LSP: Workspace Symbols" }, event.buf)
-  M.register_keymap("lsp", "n", "grt", require("telescope.builtin").lsp_type_definitions, { desc = "LSP: Type Definition" }, event.buf)
+  M.register_keymap("lsp", "n", "gO", function()
+    require("telescope.builtin").lsp_document_symbols()
+  end, { desc = "LSP: Document Symbols" }, event.buf)
+  M.register_keymap("lsp", "n", "gW", function()
+    require("telescope.builtin").lsp_dynamic_workspace_symbols()
+  end, { desc = "LSP: Workspace Symbols" }, event.buf)
+  M.register_keymap("lsp", "n", "grt", function()
+    require("telescope.builtin").lsp_type_definitions()
+  end, { desc = "LSP: Type Definition" }, event.buf)
 
   local client = vim.lsp.get_client_by_id(event.data.client_id)
   if client then
