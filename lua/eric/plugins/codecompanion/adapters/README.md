@@ -99,11 +99,11 @@ To test which auth method will be used:
 ### How Auth is Selected
 
 1. **API Key Mode** (matches pattern):
-   - Uses `~/.claude/anthropic_key.sh` script
+   - Uses `ANTHROPIC_WORK_API_KEY` environment variable
    - For work/client projects with specific API keys
 
 2. **Default Mode** (no pattern match):
-   - Uses default Anthropic authentication
+   - Uses `ANTHROPIC_API_KEY` environment variable
    - Falls back to OAuth when ACP is available
 
 ---
@@ -368,25 +368,12 @@ Default adapter using Anthropic's Claude models directly.
 
 **1. API Key (Directory-Based)**:
 - Triggered when directory matches pattern (e.g., `censinet*`)
-- Reads from: `~/.claude/anthropic_key.sh`
-- Script should output API key to stdout
-
-**Example `~/.claude/anthropic_key.sh`**:
-```bash
-#!/bin/bash
-# Return your API key
-echo "sk-ant-xxxxxxxxxxxxxxxxxxxxx"
-```
-
-Make it executable:
-```bash
-chmod +x ~/.claude/anthropic_key.sh
-```
+- Uses the `ANTHROPIC_WORK_API_KEY` environment variable.
 
 **2. Default Authentication**:
 - Used when directory doesn't match patterns
-- Currently uses default Anthropic SDK auth
-- Will support OAuth/ACP when available
+- Uses the `ANTHROPIC_API_KEY` environment variable.
+- Will support OAuth/ACP when available (via `CLAUDE_CODE_OAUTH_TOKEN`)
 
 ### Available Models
 
@@ -436,7 +423,7 @@ strategies = {
 " Test Anthropic in censinet project
 :cd ~/censinet-app
 :CodeCompanion
-" Uses API key from ~/.claude/anthropic_key.sh
+" Uses API key from ANTHROPIC_WORK_API_KEY
 
 " Test GitHub Models
 :cd ~/personal/project
@@ -458,7 +445,7 @@ Check your chat window header - it should show the adapter name and model being 
 
 | Adapter | Setup Required | Cost | Models Available | Best For |
 |---------|---------------|------|------------------|----------|
-| **Anthropic** | API key script | Pay-per-use | Claude Sonnet/Opus/Haiku | Direct Anthropic access, work projects |
+| **Anthropic** | API key env var | Pay-per-use | Claude Sonnet/Opus/Haiku | Direct Anthropic access, work projects |
 | **GitHub Models** | `gh auth login` | Free tier available | GPT-4o, Claude, Gemini, Llama | Experimenting, personal projects |
 | **OpenRouter** | API key env var | Pay-per-use | 100+ models | Model variety, unified billing |
 

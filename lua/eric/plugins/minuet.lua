@@ -23,7 +23,7 @@ return {
           -- few_shots = "see [Prompt] section for the default value",
           -- chat_input = "See [Prompt Section for default value]",
           api_key = function()
-            return io.popen("~/.claude/anthropic_key.sh"):read "*all"
+            return os.getenv("ANTHROPIC_WORK_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
           end,
           end_point = "https://api.anthropic.com/v1/messages",
           optional = {
