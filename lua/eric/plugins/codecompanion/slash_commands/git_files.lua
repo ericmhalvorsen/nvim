@@ -9,24 +9,21 @@ local constants = {
 
 ---@param chat CodeCompanion.Chat
 local callback = function(chat)
-  -- Run git ls-files to get tracked files
-  local handle = io.popen "git ls-files"
-
-  if handle then
-    local result = handle:read "*a"
-    handle:close()
-
-    if result and result ~= "" then
-      chat:add_reference({
-        role = constants.USER_ROLE,
-        content = "Git-tracked files in this repository:\n\n" .. result,
-      }, "git_files", "<git_files>")
-    else
-      vim.notify("No git-tracked files found", vim.log.levels.INFO, { title = "CodeCompanion" })
-    end
-  else
-    vim.notify("Failed to run git ls-files (not a git repo?)", vim.log.levels.WARN, { title = "CodeCompanion" })
-  end
+  -- Run git ls-files to get tracked files securely
+  vim.system({ "git", "ls-files" }, { text = true }, function(obj)
+    vim.schedule(function()
+      if obj.code == 0 and obj.stdout and obj.stdout ~= "" then
+        chat:add_reference({
+          role = constants.USER_ROLE,
+          content = "Git-tracked files in this repository:\n\n" .. obj.stdout,
+        }, "git_files", "<git_files>")
+      elseif obj.code == 0 then
+        vim.notify("No git-tracked files found", vim.log.levels.INFO, { title = "CodeCompanion" })
+      else
+        vim.notify("Failed to run git ls-files (not a git repo?)", vim.log.levels.WARN, { title = "CodeCompanion" })
+      end
+    end)
+  end)
 end
 
 return {
