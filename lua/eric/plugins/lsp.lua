@@ -137,7 +137,7 @@ return {
       -- Ruby
       "rubocop",
       -- Rust
-      "rustfmt",
+      "rstcheck",
       -- Vuln
       "trivy",
     })

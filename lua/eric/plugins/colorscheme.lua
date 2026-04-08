@@ -25,6 +25,7 @@ return {
   -- dark / light mode
   { "eliseshaffer/darklight.nvim" },
   -- Themes
+  { "drewtempelmeyer/palenight.vim" },
   { "Everblush/nvim", name = "everblush", as = "everblush" },
   {
     "maxmx03/solarized.nvim",

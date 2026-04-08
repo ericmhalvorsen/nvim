@@ -10,14 +10,11 @@ return {
   config = function()
     -- Enable autoread so buffers reload when opencode makes edits
     vim.o.autoread = true
-
-    -- Configure opencode
     vim.g.opencode_opts = {
-      -- Provider configuration (uses snacks.terminal by default)
-      provider = "snacks.terminal",
-
-      -- Custom prompts in addition to built-in ones
-      -- Built-in prompts: diagnostics, diff, document, explain, fix, optimize, review, test
+      provider = {
+        enabled = "tmux",
+        tmux = {},
+      },
       prompts = {
         -- Code Review - comprehensive review for best practices
         ["review-detailed"] = [[Review @this for:

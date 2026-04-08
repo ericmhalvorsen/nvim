@@ -370,8 +370,8 @@ function M.add_opencode_keymaps()
   local opencode = require "opencode"
 
   -- Main interface
-  M.register_keymap("ai", { "n", "v" }, "<leader>oci", opencode.ask, { desc = "OpenCode: Ask with prompt" })
-  M.register_keymap("ai", { "n", "v" }, "<leader>ocs", opencode.select, { desc = "OpenCode: Select action" })
+  M.register_keymap("ai", { "n", "v" }, "<leader>oca", opencode.ask, { desc = "OpenCode: Ask with prompt" })
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocf", opencode.select, { desc = "OpenCode: Select action" })
 
   -- Built-in prompts with context
   M.register_keymap("ai", { "n", "v" }, "<leader>ocd", function()
@@ -411,7 +411,7 @@ function M.add_opencode_keymaps()
     opencode.prompt "review-detailed"
   end, { desc = "OpenCode: Detailed code review" })
 
-  M.register_keymap("ai", { "n", "v" }, "<leader>oca", function()
+  M.register_keymap("ai", { "n", "v" }, "<leader>ocA", function()
     opencode.prompt "analyze"
   end, { desc = "OpenCode: Analyze with diagnostics" })
 

@@ -161,7 +161,7 @@ return { -- Autocompletion
     },
     sources = {
       -- Default sources active in all buffers
-      default = { "lsp", "path", "snippets", "lazydev", "calc", "emoji", "nerdfont", "dadbod" },
+      default = { "lsp", "path", "snippets", "lazydev", "calc", "emoji", "nerdfont", "gitmoji", "dadbod" },
 
       -- Per-filetype sources
       per_filetype = {
@@ -262,7 +262,7 @@ return { -- Autocompletion
           name = "Gitmoji",
           score_offset = 90, -- High priority for commit messages
           opts = {
-            filetypes = { "gitcommit" },
+            filetypes = { "gitcommit", "gitconfig" },
             append_space = true, -- Add space after emoji
             complete_as = "emoji", -- Options: "emoji" or "text"
           },
