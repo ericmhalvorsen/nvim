@@ -1,6 +1,6 @@
 return { -- Fuzzy Finder (files, lsp, etc)
   "nvim-telescope/telescope.nvim",
-  event = "VimEnter",
+  cmd = "Telescope",
   dependencies = {
     "nvim-lua/plenary.nvim",
     { -- If encountering errors, see telescope-fzf-native README for installation instructions
@@ -98,5 +98,7 @@ return { -- Fuzzy Finder (files, lsp, etc)
 
     pcall(require("telescope").load_extension, "fzf")
     pcall(require("telescope").load_extension, "ui-select")
+    pcall(require("telescope").load_extension, "file_browser")
+    pcall(require("telescope").load_extension, "yank_history")
   end,
 }
